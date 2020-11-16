@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html lang="en" 
+		xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Asset Directory</title>
+</head>
+
+<body>
+
+<div class="container">
+
+	<h3>Asset Directory</h3>
+	<hr>
+	
+	<div>
+		User: <span sec:authentication="name"></span>
+		<br>
+		Role(s): <span sec:authentication="principal.authorities"></span>
+		<br><br>
+	</div>
+	
+    <form th:action="@{/assets/search}" class="form-inline">
+		<a th:href="@{/assets/showFormForAdd}"
+			class="btn btn-primary btn-sm mr-5 mb-3">
+			Add asset
+		</a>
+    </form>	
+	
+	
+	<table class="table table-bordered table-striped">
+		<thead class="thead-dark">
+			<tr>
+				<th>Bank of America </th>
+				<th>Chase</th>
+				<th>HSBC Turkey</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<tr th:each="tempAsset : ${assets}">
+			
+				<td th:text="${tempAsset.boa}" />	
+				<td th:text="${tempAsset.chase}" />	
+				<td th:text="${tempAsset.hsbcTr}" />	
+				
+				<td>
+					<div sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
+
+						<!-- Add "update" button/link -->
+						<a th:href="@{/assets/showFormForUpdate(assetId=${tempAsset.id})}"
+						   class="btn btn-info btn-sm">
+							Update
+						</a>
+
+					</div>					
+				
+					<div sec:authorize="hasRole('ROLE_ADMIN')">  
+					
+						<!-- Add "delete" button/link -->					
+						<a th:href="@{/assets/delete(assetId=${tempAsset.id})}"
+						   class="btn btn-danger btn-sm"
+						   onclick="if (!(confirm('Are you sure you want to delete this asset?'))) return false">
+							Delete
+						</a>
+
+					</div>					
+				</td>
+				
+				
+			</tr>
+		</tbody>		
+	</table>
+	
+	<!-- Add a logout button -->
+	<form action="#" th:action="@{/logout}" 
+			   method="POST">
+	
+		<input type="submit" value="Logout" class="btn btn-outline-primary mt-2" />
+	
+	</form>
+	
+</div>
+	
+</body>
+</html>
+
+
+
