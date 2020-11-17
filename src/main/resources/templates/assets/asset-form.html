@@ -2,55 +2,78 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
 
 
-	    <!-- Bootstrap Date Picker -->
-	<link th:rel="stylesheet" th:href="@{assets/bootstrap-datepicker/css/bootstrap-datepicker.css}"/>
-    <link th:rel="stylesheet" th:href="@{assets/bootstrap-datepicker/css/bootstrap-datepicker.standalone.css}"/>	
+  <!-- Bootstrap Date Picker -->
+  <link th:rel="stylesheet" th:href="@{assets/bootstrap-datepicker/css/bootstrap-datepicker.css}"/>
+  <link th:rel="stylesheet"
+        th:href="@{assets/bootstrap-datepicker/css/bootstrap-datepicker.standalone.css}"/>
 
-	<title>Save Asset</title>
+  <title>Save Asset</title>
 </head>
 
 <body>
 
-	<div class="container">
-	
-		<h3>Asset Directory</h3>
-		<hr>
-		
-		<p class="h4 mb-4">Save Asset</p>
-	
-		<form th:action="@{/assets/save}"
-			  th:object="${asset}" method="POST">
-				
-		
-			<!-- Add hidden form field to handle update -->
-			<input type="hidden" th:field="*{id}" />
+<div class="container">
 
-			
-			<input type="text" th:field="*{boa}"
-					class="form-control mb-4 col-4" placeholder="Bank of America">
+  <h3>Asset Directory</h3>
+  <hr>
 
-			<input type="text" th:field="*{chase}"
-					class="form-control mb-4 col-4" placeholder="Chase">
+  <p class="h4 mb-4">Save Asset</p>
 
-			<input type="text" th:field="*{hsbcTr}"
-					class="form-control mb-4 col-4" placeholder="HSBC Turkey">
-				
-			<button type="submit" class="btn btn-info col-2">Save</button>
-						
-		</form>
-	
-		<hr>
-		<a th:href="@{/assets/list}">Back to Assets List</a>
-		
-	</div>
+  <form th:action="@{/assets/save}"
+        th:object="${asset}" method="POST">
+
+
+    <!-- Add hidden form field to handle update -->
+    <th>Month</th>
+    <input type="hidden" th:field="*{id}"/>
+
+    <input type="text" th:field="*{month}"
+           class="form-control mb-4 col-4" placeholder="Month">
+
+    <th>Bank of America</th>
+    <input type="text" th:field="*{boa}"
+           class="form-control mb-4 col-4" placeholder="Bank of America">
+
+    <th>Chase</th>
+    <input type="text" th:field="*{chase}"
+           class="form-control mb-4 col-4" placeholder="Chase">
+
+    <th>HSBC Turkey</th>
+    <input type="text" th:field="*{hsbcTr}"
+           class="form-control mb-4 col-4" placeholder="HSBC Turkey">
+
+    <th>Stock Market</th>
+    <input type="text" th:field="*{stock}"
+           class="form-control mb-4 col-4" placeholder="Stock Market">
+
+    <th>Retirement-401K</th>
+    <input type="text" th:field="*{ret401k}"
+           class="form-control mb-4 col-4" placeholder="Retirement-401K">
+
+    <th>Retirement-Turkey</th>
+    <input type="text" th:field="*{retTur}"
+           class="form-control mb-4 col-4" placeholder="Retirement-Turkey">
+
+
+    <button type="submit" class="btn btn-info col-2">Save</button>
+
+  </form>
+
+  <hr>
+  <a th:href="@{/assets/list}">Back to Assets List</a>
+
+</div>
 </body>
 
 </html>
