@@ -35,7 +35,7 @@ public class AssetController {
         // add to the spring model
         theModel.addAttribute("assets", theAssets);
 
-        return "/assets/list-assets";
+        return "assets/list-assets";
     }
 
     @GetMapping("/showFormForAdd")
@@ -46,7 +46,7 @@ public class AssetController {
 
         theModel.addAttribute("asset", theAsset);
 
-        return "/assets/asset-form";
+        return "assets/asset-form";
     }
 
     @GetMapping("/showFormForUpdate")
@@ -60,7 +60,7 @@ public class AssetController {
         theModel.addAttribute("asset", theAsset);
 
         // send over to our form
-        return "/assets/asset-form";
+        return "assets/asset-form";
     }
 
 
@@ -75,7 +75,13 @@ public class AssetController {
         assetService.save(theAsset);
 
         // use a redirect to prevent duplicate submissions
-        return "redirect:/assets/list";
+        //return "redirect:/assets/list"; http://localhost:8089/assets/assets/list
+        //return "@{/assets/list}"; FAILED
+        //return "redirect:assets/list"; FAILED
+        //return "assets/list"; 500
+        //return "@{/list}"; FAILED
+        //return "list"; 500
+        return "redirect:list";
     }
 
 
@@ -86,8 +92,10 @@ public class AssetController {
         assetService.deleteById(theId);
 
         // redirect to /assets/list
-        return "redirect:/assets/list";
-
+        //return "redirect:/assets/list"; FAILED
+        //return "@{assets/list}"; FAILED
+        //return "/assets/list"; 500
+        return "redirect:list";
     }
 
 
