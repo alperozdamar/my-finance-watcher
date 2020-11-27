@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: stop current running container
+      command: docker stop my-finance-watcher-1.0.0
+      ignore_errors: yes
+
+    - name: remove stopped container
+      command: docker rm my-finance-watcher-1.0.0
+      ignore_errors: yes
+
+    - name: remove docker image
+      command: docker rmi my-finance-watcher-1.0.0
+      ignore_errors: yes
+
+    - name: build docker image using jar file
+      command: docker build . -t my-finance-watcher-1.0.0
+      args:
+        chdir: /opt/docker
+
+    - name: create container using my-finance-watcher-1.0.0
+      command: docker run -p 8089:8089 --name my-finance-watcher-1.0.0 --link mysql-standalone:mysql -d my-finance-watcher-1.0.0
