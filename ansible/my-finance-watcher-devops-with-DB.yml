@@ -18,8 +18,17 @@
     - name: create docker container using mysql:5.6 image
       command: docker run --name mysql-standalone -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=test -e MYSQL_USER=sa -e MYSQL_PASSWORD=password -d mysql:5.6
 
-    - name: copy file
+    - name: copy sql file
       command: docker cp /opt/docker/query.sql mysql-standalone:/
 
-    - name: run bash on mysql-standalone container
-      command: docker exec mysql-standalone /bin/sh -c 'mysql -u sa -ppassword -h127.0.0.1 </query.sql'
+    - name: copy script file
+      command: docker cp /opt/docker/runSql.sh mysql-standalone:/
+
+    - name: Give permission to Execute
+      command: docker exec mysql-standalone /bin/sh -c 'chmod 777 /runSql.sh'
+
+    - name: Execute runSql.sh
+      command: docker exec mysql-standalone /bin/sh -c './runSql.sh'
+
+      #  - name: run bash on mysql-standalone container
+      #command: docker exec mysql-standalone /bin/sh -c 'mysql -u sa -ppassword -h127.0.0.1 </query.sql'
