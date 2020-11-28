@@ -1,31 +1,3 @@
-# my-finance-watcher
-SpringBoot+SpringMVC+Hibernate+thymeleaf Application
-
-mvn install -Dmaven.test.skip=true
-docker build . -t my-finance-watcher-1.0.0
-docker run -p 8089:8089 --name my-finance-watcher-1.0.0 --link mysql-standalone:mysql -d my-finance-watcher-1.0.0
-
-Check Container:
-docker exec -ti my-finance-watcher-1.0.0 bash 
-
-Check Logs: 
-docker logs my-finance-watcher-1.0.0
-Tail Logs:
-docker logs my-finance-watcher-1.0.0 --follow
-
-Runs successfully: 
-mvn spring-boot:run
-
-MYSQL : 
-
-docker pull mysql:5.6
-
-docker run --name mysql-standalone -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=test -e MYSQL_USER=sa -e MYSQL_PASSWORD=password -d mysql:5.6
-
-docker exec -ti mysql-standalone bash  
-
-mysql -u sa -p'password' (mysql -u $USERNAME -p'$PASSWORD')
-
 show databases;
 
 use test;
@@ -69,9 +41,3 @@ INSERT IGNORE INTO `authorities` (`username`, `authority`) VALUES
 	('susan', 'ROLE_ADMIN'),
 	('susan', 'ROLE_EMPLOYEE');
 /*!40000 ALTER TABLE `authorities` ENABLE KEYS */;
-
-
-
-
-
-
