@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+
+    - name: stop current running mysql-standalone container
+      command: docker stop mysql-standalone
+      ignore_errors: yes
+
+    - name: remove stopped container
+      command: docker rm mysql-standalone
+      ignore_errors: yes
+
+    - name: remove image of my-prepopulated-image for DB.
+      command: docker rmi my-prepopulated-image
+      ignore_errors: yes
+
+    - name: Build my-prepopulated-image for DB.
+      command: docker build --tag my-prepopulated-image .
+      args:
+        chdir: /opt/docker/db
+
+
+    - name: Build my-prepopulated-image for DB.
+      command: docker run -d --rm --name mysql-standalone my-prepopulated-image
