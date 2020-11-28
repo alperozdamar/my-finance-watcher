@@ -3,7 +3,6 @@
   become: true
 
   tasks:
-
     - name: stop current running mysql-standalone container
       command: docker stop mysql-standalone
       ignore_errors: yes
@@ -20,7 +19,6 @@
       command: docker build --tag my-prepopulated-image .
       args:
         chdir: /opt/docker/db
-
 
     - name: Build my-prepopulated-image for DB.
       command: docker run -d --rm --name mysql-standalone my-prepopulated-image
