@@ -1,0 +1,34 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: ozdamar-my-finance-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ozdamar-my-finance
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+
+  template:
+    metadata:
+      labels:
+        app: ozdamar-my-finance
+    spec:
+      containers:
+        - name: ozdamar-my-finance
+          image: alperoz/my-finance-watcher-1.0.0:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8089
+        - name: mysql-standalone
+          image: alperoz/mysql-standalone:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3306
+
+
+

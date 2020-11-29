@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ozdamar-my-finance-service
+  labels:
+    app: ozdamar-my-finance-project
+spec:
+  selector:
+    app: ozdamar-my-finance-project
+  type: LoadBalancer
+  ports:
+    - port: 8089
+      targetPort: 8089
+      nodePort: 31200
