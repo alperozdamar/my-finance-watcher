@@ -1,0 +1,31 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: stop current running mysql-standalone container
+      command: docker stop mysql-standalone
+      ignore_errors: yes
+
+    - name: remove stopped container
+      command: docker rm mysql-standalone
+      ignore_errors: yes
+
+    - name: remove image of my-prepopulated-image for DB.
+      command: docker rmi my-prepopulated-image
+      ignore_errors: yes
+
+    - name: Build my-prepopulated-image for DB.
+      command: docker build --tag my-prepopulated-image .
+      args:
+        chdir: /opt/docker/db
+
+    - name: create tag to image
+      command: docker tag my-prepopulated-image alperoz/mysql-standalone
+
+    - name: push image on to dockerhub
+      command: docker push alperoz/mysql-standalone
+
+    - name: remove docker images from ansible server
+      command: docker rmi alperoz/mysql-standalone:latest alperoz/mysql-standalone
+      ignore_errors: yes
