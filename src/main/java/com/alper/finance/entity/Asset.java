@@ -1,5 +1,8 @@
 package com.alper.finance.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.Date;
 
 @Entity
 @Table(name = "asset")
@@ -19,9 +23,8 @@ public class Asset {
     @Column(name = "id")
     private int id;
 
-
-    @Column(name = "month")
-    private int month;
+    @Column(name = "date")
+    private Date date;
 
     @Column(name = "boa")
     private int boa;
@@ -51,9 +54,9 @@ public class Asset {
     public Asset() {
     }
 
-    public Asset(int id, int month, int boa, int chase, int hsbcTr, int stock, int ret401k, int retTur, int total) {
+    public Asset(int id, Date date, int boa, int chase, int hsbcTr, int stock, int ret401k, int retTur, int total) {
         this.id = id;
-        this.month = month;
+        this.date = date;
         this.boa = boa;
         this.chase = chase;
         this.hsbcTr = hsbcTr;
@@ -62,16 +65,6 @@ public class Asset {
         this.retTur = retTur;
         this.total = total;
     }
-
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
 
     // define getter/setter
     public int getId() {
@@ -153,11 +146,19 @@ public class Asset {
         this.total = total;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "Asset{" +
                 "id=" + id +
-                ", month=" + month +
+                ", date=" + date +
                 ", boa=" + boa +
                 ", chase=" + chase +
                 ", hsbcTr=" + hsbcTr +

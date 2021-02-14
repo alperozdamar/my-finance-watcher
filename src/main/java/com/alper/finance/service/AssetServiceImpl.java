@@ -26,12 +26,12 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public Asset findById(int theId) {
-        Optional<Asset> result = assetRepository.findById(theId);
+        List<Asset> result = assetRepository.findById(theId);
 
         Asset theAsset = null;
 
-        if (result.isPresent()) {
-            theAsset = result.get();
+        if (result.size()!=0) {
+            theAsset = result.get(0);
         } else {
             // we didn't find the asset
             throw new RuntimeException("Did not find asset id - " + theId);
@@ -58,13 +58,17 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public int calculateDifference(Asset theAsset) {
-        List prevAssetList = assetRepository.findByMonth(theAsset.getMonth() - 1);
 
-        if (prevAssetList == null || prevAssetList.size() == 0) {
+        if(assetRepository.getMaxId()==null)
             return 0;
-        }
 
-        return theAsset.getTotal() - ((Asset) prevAssetList.get(0)).getTotal();
+        Optional<Asset> prevAssetList = assetRepository.findById( assetRepository.getMaxId());
+
+        if (!prevAssetList.isPresent()) {
+            return 0;
+        }else{
+            return theAsset.getTotal() - ((Asset) prevAssetList.get()).getTotal();
+        }
     }
 
 
