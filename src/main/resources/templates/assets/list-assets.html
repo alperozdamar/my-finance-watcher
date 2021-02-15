@@ -57,7 +57,7 @@
 
     <tbody>
     <tr th:each="tempAsset : ${assets}">
-      <td th:text="${tempAsset.date}"/>
+      <td th:text="${#dates.format(tempAsset.date, 'MM-dd-yyyy')}"></td>
       <td th:text="${tempAsset.boa}"/>
       <td th:text="${tempAsset.chase}"/>
       <td th:text="${tempAsset.hsbcTr}"/>
