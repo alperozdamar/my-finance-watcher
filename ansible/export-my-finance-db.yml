@@ -2,8 +2,8 @@
 - hosts: all
   become: true
   tasks:
-    - name: stop current running container
-      command: docker exec mysql-standalone /usr/bin/mysqldump -u sa --password=password DATABASE > backup.sql
+    - name: Export My Finance DB(mysql-standalone)
+      command: docker exec mysql-standalone /usr/bin/mysqldump -u root --password=password DATABASE > backup.sql
       ignore_errors: yes
 
 
