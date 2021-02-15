@@ -15,6 +15,9 @@ public interface AssetRepository extends JpaRepository<Asset, Integer> {
     //  @Query("FROM Asset a where a.month = :month")
     //  public List<Asset> findByMonth(@Param("month") int month);
 
+    @Query("SELECT a FROM Asset a order by a.date")
+    public List<Asset> findAll();
+
     public List<Asset> findById(int id);
 
     @Query("SELECT Max(a.id) FROM Asset a ")
