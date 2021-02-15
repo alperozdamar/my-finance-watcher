@@ -42,7 +42,7 @@
   <table class="table table-bordered table-striped">
     <thead class="thead-dark">
     <tr>
-      <th>Week No</th>
+      <th>Date</th>
       <th>Bank of America</th>
       <th>Chase</th>
       <th>HSBC Turkey</th>
@@ -57,8 +57,7 @@
 
     <tbody>
     <tr th:each="tempAsset : ${assets}">
-
-      <td th:text="${tempAsset.month}"/>
+      <td th:text="${#dates.format(tempAsset.date, 'MM-dd-yyyy')}"></td>
       <td th:text="${tempAsset.boa}"/>
       <td th:text="${tempAsset.chase}"/>
       <td th:text="${tempAsset.hsbcTr}"/>

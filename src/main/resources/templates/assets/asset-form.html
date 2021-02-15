@@ -11,6 +11,20 @@
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
         integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
         crossorigin="anonymous">
+
+  <!-- add styles -->
+  <link rel="stylesheet"  th:href="@{/css/jquery-ui-1.9.2.custom.css}" type="text/css" />
+  <!-- add scripts -->
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+    $( function() {
+      $( "#datepicker" ).datepicker();
+    } );
+  </script>
+
   <title>Save Asset</title>
 </head>
 
@@ -28,11 +42,12 @@
 
 
     <!-- Add hidden form field to handle update -->
-    <th>Week No.</th>
     <input type="hidden" th:field="*{id}"/>
 
-    <input type="text" th:field="*{month}"
-           class="form-control mb-4 col-4" placeholder="Month">
+    <th>Date</th>
+    <input id="datepicker" type="text" th:field="*{date}"
+           class="form-control mb-4 col-4" placeholder="Date"/>
+
 
     <th>Bank of America</th>
     <input type="text" th:field="*{boa}"
