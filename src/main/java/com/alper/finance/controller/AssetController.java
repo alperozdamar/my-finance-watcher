@@ -1,7 +1,8 @@
 package com.alper.finance.controller;
 
+import com.alper.finance.entity.Asset;
+import com.alper.finance.service.AssetService;
 import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,10 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.alper.finance.entity.Asset;
-import com.alper.finance.service.AssetService;
-
 
 @Controller
 @RequestMapping("/assets")
