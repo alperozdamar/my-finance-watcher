@@ -30,7 +30,7 @@ public class AssetServiceImpl implements AssetService {
 
         Asset theAsset = null;
 
-        if (result.size()!=0) {
+        if (result.size() != 0) {
             theAsset = result.get(0);
         } else {
             // we didn't find the asset
@@ -59,14 +59,15 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public int calculateDifference(Asset theAsset) {
 
-        if(assetRepository.getMaxId()==null)
+        if (assetRepository.getMaxId() == null) {
             return 0;
+        }
 
-        Optional<Asset> prevAssetList = assetRepository.findById( assetRepository.getMaxId());
+        Optional<Asset> prevAssetList = assetRepository.findById(assetRepository.getMaxId());
 
         if (!prevAssetList.isPresent()) {
             return 0;
-        }else{
+        } else {
             return theAsset.getTotal() - ((Asset) prevAssetList.get()).getTotal();
         }
     }
