@@ -34,12 +34,16 @@ public class Asset {
 
     @Column(name = "ret_tur")
     private int retTur;
-
-    @Column(name = "difference")
+    
     private int difference;
 
     @Column(name = "total")
     private int total;
+
+    @Column(name = "description")
+    private String description;
+
+    
 
     // define constructors
     public Asset() {
@@ -145,6 +149,14 @@ public class Asset {
         this.date = date;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
     @Override
     public String toString() {
         return "Asset{" +

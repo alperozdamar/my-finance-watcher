@@ -1,15 +1,14 @@
 package com.alper.finance.controller;
 
 import com.alper.finance.entity.Asset;
+import com.alper.finance.entity.Statistic;
 import com.alper.finance.service.AssetService;
-import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/assets")
@@ -28,9 +27,35 @@ public class AssetController {
 
         // get assets from db
         List<Asset> theAssets = assetService.findAll();
+        
+        for (Asset asset:theAssets){
+            asset.setDifference(assetService.calculateDifference(asset));
+        }
+        
+        Statistic statistic = new Statistic();
+        if (theAssets.size() > 0) {
+            Asset latestAsset = theAssets.get(theAssets.size() - 1);
 
+            
+            statistic.setTotalAsset(latestAsset.getTotal());
+            statistic.setReadyMoney(latestAsset.getTotal() - latestAsset.getRet401k() - latestAsset.getRetTur());
+
+            Asset firstAsset = theAssets.get(0);
+
+            latestAsset.getDate();
+            long diffInMillies = Math.abs(latestAsset.getDate().getTime() - firstAsset.getDate().getTime());
+            long days = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+            long diff = days / 30;
+            if(diff>0) {
+                statistic.setMonthlySavingAverage((latestAsset.getTotal() - firstAsset.getTotal()) / diff);
+            }
+
+        }
         // add to the spring model
+        theModel.addAttribute("statistic", statistic);
         theModel.addAttribute("assets", theAssets);
+
 
         return "assets/list-assets";
     }
@@ -48,7 +73,7 @@ public class AssetController {
 
     @GetMapping("/showFormForUpdate")
     public String showFormForUpdate(@RequestParam("assetId") int theId,
-            Model theModel) {
+                                    Model theModel) {
 
         // get the asset from the service
         Asset theAsset = assetService.findById(theId);

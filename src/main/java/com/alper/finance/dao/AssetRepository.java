@@ -1,12 +1,12 @@
 package com.alper.finance.dao;
 
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.alper.finance.entity.Asset;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Date;
+import java.util.List;
 
 public interface AssetRepository extends JpaRepository<Asset, Integer> {
 
@@ -22,4 +22,8 @@ public interface AssetRepository extends JpaRepository<Asset, Integer> {
 
     @Query("SELECT Max(a.id) FROM Asset a ")
     public Integer getMaxId();
+
+    @Query("SELECT a FROM Asset a WHERE a.date < :date order by a.date DESC ")
+    public List<Asset> getPreviousAsset(@Param("date") Date date);
+    
 }
