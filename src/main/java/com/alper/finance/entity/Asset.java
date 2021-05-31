@@ -42,9 +42,7 @@ public class Asset {
 
     @Column(name = "description")
     private String description;
-
     
-
     // define constructors
     public Asset() {
     }
