@@ -65,6 +65,7 @@
             <th>Stock Market</th>
             <th>Retirement-401K</th>
             <th>Retirement-Turkey</th>
+            <th>Serda Account</th>
             <th>Difference</th>
             <th>Total</th>
             <th>Description</th>
@@ -81,6 +82,7 @@
             <td th:text="'$'+${tempAsset.stock}"/>
             <td th:text="'$'+${tempAsset.ret401k}"/>
             <td th:text="'$'+${tempAsset.retTur}"/>
+            <td th:text="'$'+${tempAsset.serda}"/>
             <td th:text="${tempAsset.difference}"/>
             <td th:text="'$'+${tempAsset.total}"/>
             <td th:text="${tempAsset.description}"/>

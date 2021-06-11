@@ -48,7 +48,7 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public int calculateTotal(Asset asset) {
         return asset.getBoa() + asset.getChase() + asset.getHsbcTr() + asset.getStock() + asset.getRet401k() + asset
-                .getRetTur();
+                .getRetTur() + asset.getSerda();
     }
 
     @Override

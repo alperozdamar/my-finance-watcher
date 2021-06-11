@@ -34,6 +34,9 @@ public class Asset {
 
     @Column(name = "ret_tur")
     private int retTur;
+
+    @Column(name = "serda", columnDefinition = "int(11) default 0") 
+    private int serda;
     
     private int difference;
 
@@ -154,7 +157,15 @@ public class Asset {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
+    public int getSerda() {
+        return serda;
+    }
+
+    public void setSerda(int serda) {
+        this.serda = serda;
+    }
+
     @Override
     public String toString() {
         return "Asset{" +
@@ -166,8 +177,10 @@ public class Asset {
                 ", stock=" + stock +
                 ", ret401k=" + ret401k +
                 ", retTur=" + retTur +
+                ", serda=" + serda +
                 ", difference=" + difference +
                 ", total=" + total +
+                ", description='" + description + '\'' +
                 '}';
     }
 }
