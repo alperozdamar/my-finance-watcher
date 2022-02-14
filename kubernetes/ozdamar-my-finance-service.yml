@@ -1,14 +1,18 @@
 apiVersion: v1
 kind: Service
+
 metadata:
   name: ozdamar-my-finance-service
   labels:
-    app: ozdamar-my-finance-project
+    app: ozdamar-my-finance
+    
 spec:
   selector:
-    app: ozdamar-my-finance-project
+    app: ozdamar-my-finance # This should match within deployment file.
+    
   type: LoadBalancer
+  
   ports:
     - port: 8089
-      targetPort: 8089
+      targetPort: 8089 # This should match containerPort in deployment file.
       nodePort: 31200

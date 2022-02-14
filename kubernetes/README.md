@@ -1,3 +1,7 @@
+Note: Kubernetes deployment is not working because there is a communication problem between mysql pod 
+and application pod. Application could not access to mysql pod in Kubernetes environment. This is a 
+TODO for a future work. 
+
 https://github.com/yankils/Simple-DevOps-Project/blob/master/Kubernetes/Kubernetes-setup.MD
 
 
@@ -23,3 +27,8 @@ Suggestions:
 
 ssh -i ~/.ssh/id_rsa ubuntu@api.my-finance.k8s.ozdamar.com
 
+
+
+Check Logs of pod in Kubetctl: 
+kubectl logs --follow ozdamar-my-finance-deployment-959c69556-7h9hk -c mysql-standalone
+kubectl logs --follow ozdamar-my-finance-deployment-959c69556-7h9hk -c ozdamar-my-finance
