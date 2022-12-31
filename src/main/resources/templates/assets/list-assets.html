@@ -44,14 +44,12 @@
             <th>Total Asset</th>
             <th>Money Ready</th>
             <th>Average Monthly Saving</th>
-            <th>Rem. Mortgage Principal</th>
         </tr>
         </thead>
         <tbody>
         <tr>
             <td th:text="'$'+ ${statistic.getTotalAsset()}"/>
             <td th:text="'$'+${statistic.getReadyMoney()}"/>
-            <td th:text="'$'+${statistic.getMonthlySavingAverage()}"/>
             <td th:text="'$'+${statistic.getMonthlySavingAverage()}"/>
         </tr>
         </tbody>

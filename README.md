@@ -2,18 +2,25 @@
 SpringBoot+SpringMVC+Hibernate+thymeleaf Application
 
 mvn install -Dmaven.test.skip=true
+
 docker build . -t my-finance-watcher-1.0.0
+
 docker run -p 8089:8089 --name my-finance-watcher-1.0.0 --link mysql-standalone:mysql -d my-finance-watcher-1.0.0
 
 Check Container:
+
 docker exec -ti my-finance-watcher-1.0.0 bash 
 
 Check Logs: 
+
 docker logs my-finance-watcher-1.0.0
+
 Tail Logs:
+
 docker logs my-finance-watcher-1.0.0 --follow
 
 Runs successfully: 
+
 mvn spring-boot:run
 
 MYSQL : 
