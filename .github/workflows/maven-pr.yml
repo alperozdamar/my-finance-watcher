@@ -30,7 +30,7 @@ jobs:
         with:
           name: Package 
           path: staging
-      - name: Login into Docker HUB with DockerHub Token...
+      - name: Login into Remote Docker HUB with DockerHub Token...
         run: sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Building Dockerfile...  
         run: sudo docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest
@@ -38,5 +38,22 @@ jobs:
         run: sudo docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}
       - name: Pushing the image into Docker Hub... 
         run: sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}
+      - name: Removing docker images from Local Server..
+        run: sudo docker rmi ${{ env.REPO }}:latest ${{ secrets.DOCKERHUB_USERNAME }}/my-finance-watcher-1.0.0
+      - name: Stoping Current running container
+        run: sudo docker stop ${{ env.REPO }}
+      - name: Removing stopped container
+        run: sudo docker rm ${{ env.REPO }}
+      - name: Removing Docker image (${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest)
+        run: sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest
+      - name: Pulling docker image from duckerhub
+        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest
+      - name: Creating container using ${{ env.REPO }}
+        run: sudo docker run -p 8089:8089 --name ${{ env.REPO }} --link mysql-standalone:mysql -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest 
+      
+       
+        
+        
+        
 
 
