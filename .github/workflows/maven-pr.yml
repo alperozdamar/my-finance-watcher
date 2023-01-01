@@ -29,5 +29,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}       
       - uses: docker/build-push-action@v3
         with:
-          push: true
-          tags: user/my-finance-watcher-1.0.0:latest
+          push: true 
+          tags: user/my-finance-watcher-1.0.0:latest    
+      -  run: echo whoami 
+      -  run: whoami   
