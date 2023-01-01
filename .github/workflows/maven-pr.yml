@@ -40,12 +40,16 @@ jobs:
         run: sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}
       - name: Removing docker images from Local Server..
         run: sudo docker rmi ${{ env.REPO }}:latest ${{ secrets.DOCKERHUB_USERNAME }}/my-finance-watcher-1.0.0
+        continue-on-error: true
       - name: Stoping Current running container
         run: sudo docker stop ${{ env.REPO }}
+        continue-on-error: true
       - name: Removing stopped container
         run: sudo docker rm ${{ env.REPO }}
+        continue-on-error: true
       - name: Removing Docker image (${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest)
         run: sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest
+        continue-on-error: true
       - name: Pulling docker image from duckerhub
         run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest
       - name: Creating container using ${{ env.REPO }}
