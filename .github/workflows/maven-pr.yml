@@ -26,9 +26,14 @@ jobs:
         with:
           name: Package 
           path: staging
-      - run: sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} 
+      - name: Login into Docker HUB with DockerHub Token...
+        run: sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
         env:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}       
-      - run: sudo docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/my-finance-watcher-1.0.0:latest
-        
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          REPO: my-finance-watcher-1.0.0
+      - run: sudo docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/$REPO:latest
+      - run: sudo docker tag $REPO alperoz/$REPO        
+      - run: sudo docker push alperoz/$REPO
+
+
