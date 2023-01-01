@@ -11,7 +11,10 @@ jobs:
   build-and-deploy:
     #runs-on: ubuntu-latest
     runs-on: self-hosted
-    steps:      
+    steps:
+      env:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
       - run: sudo systemctl start docker
       - run: echo whoami
       - run: whoami
@@ -26,9 +29,6 @@ jobs:
         with:
           name: Package 
           path: staging
-      - run: sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }} 
-        env:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}       
-      - run: sudo docker build . -t my-finance-watcher-1.0.0:latest
+      - run: sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}         
+      - run: sudo docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/my-finance-watcher-1.0.0:latest
         
