@@ -32,8 +32,11 @@ jobs:
           path: staging
       - name: Login into Docker HUB with DockerHub Token...
         run: sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-      - run: sudo docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest
-      - run: sudo docker tag ${{ env.REPO }} alperoz/${{ env.REPO }}        
-      - run: sudo docker push alperoz/${{ env.REPO }}
+      - name: Building Dockerfile...  
+        run: sudo docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest
+      - name: Tagging the image...
+        run: sudo docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}
+      - name: Pushing the image into Docker Hub... 
+        run: sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}
 
 
