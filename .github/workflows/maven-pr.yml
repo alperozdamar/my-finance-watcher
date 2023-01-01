@@ -8,7 +8,7 @@ on:
     types: [ opened, reopened ]
     branches: [ master, main ]
 jobs:
-  build:
+  build-and-deploy:
     #runs-on: ubuntu-latest
     runs-on: self-hosted
     steps:
@@ -23,4 +23,22 @@ jobs:
         with:
           name: Package 
           path: staging
-          
+  docker-login:
+          env:
+            DOCKER_USER:${{secrets.DOCKER_USER}}
+            DOCKER_:${{secrets.DOCKER_USER}}
+          run:
+            docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  docker push: 
+          env:
+            REPO: my-finance-watcher-1.0.0
+          run: |
+            docker build -t $REPO .
+            docker tag $REPO:latest ${{secrets.DOCKER_USER}}/$REPO:latest
+            docker push ${{secrets.DOCKER_USER}}/$REPO
+            
+  
+            
+            
+            
+            
