@@ -31,7 +31,5 @@ jobs:
         env:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}       
-      - uses: docker/build-push-action@v3
-        with:
-          push: true 
-          tags: user/my-finance-watcher-1.0.0:latest    
+      - run: docker build . -t my-finance-watcher-1.0.0:latest
+        
