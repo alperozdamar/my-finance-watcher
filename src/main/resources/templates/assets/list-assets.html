@@ -43,7 +43,8 @@
         <tr>
             <th>Total Asset</th>
             <th>Money Ready</th>
-            <th>Average Monthly Saving</th>
+            <th>Average Monthly Saving (Since Sept. 2020) </th>
+            <th>Last 3 Months Avg. Saving</th>
             <th>Monthly Mortgage Payment</th>
         </tr>
         </thead>
@@ -52,6 +53,7 @@
             <td th:text="'$'+ ${statistic.getTotalAsset()}"/>
             <td th:text="'$'+${statistic.getReadyMoney()}"/>
             <td th:text="'$'+${statistic.getMonthlySavingAverage()}"/>
+            <td th:text="'$'+${statistic.getThreeMonthsSavingAverage()}"/>
             <td> $2991 <td/>
         </tr>
         </tbody>

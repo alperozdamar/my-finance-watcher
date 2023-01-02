@@ -27,16 +27,17 @@ public class AssetController {
 
         // get assets from db
         List<Asset> theAssets = assetService.findAll();
-        
-        for (Asset asset:theAssets){
+
+        for (Asset asset : theAssets) {
             asset.setDifference(assetService.calculateDifference(asset));
         }
-        
+
         Statistic statistic = new Statistic();
         if (theAssets.size() > 0) {
             Asset latestAsset = theAssets.get(0);
+            Asset threeMonthsAgoAsset = theAssets.get(5);
 
-            
+
             statistic.setTotalAsset(latestAsset.getTotal());
             statistic.setReadyMoney(latestAsset.getTotal() - latestAsset.getRet401k() - latestAsset.getRetTur());
 
@@ -47,9 +48,11 @@ public class AssetController {
             long days = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
             long diff = days / 30;
-            if(diff>0) {
+            if (diff > 0) {
                 statistic.setMonthlySavingAverage((latestAsset.getTotal() - firstAsset.getTotal()) / diff);
             }
+
+            statistic.setThreeMonthsSavingAverage((latestAsset.getTotal() - threeMonthsAgoAsset.getTotal()) / diff);
 
         }
         // add to the spring model

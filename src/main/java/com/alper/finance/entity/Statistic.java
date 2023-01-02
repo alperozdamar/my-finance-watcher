@@ -6,6 +6,8 @@ public class Statistic {
 
     private long monthlySavingAverage;
 
+    private long threeMonthsSavingAverage;
+
     private long readyMoney; //Retirement money excluded 
 
     public long getTotalAsset() {
@@ -30,5 +32,13 @@ public class Statistic {
 
     public void setTotalAsset(long totalAsset) {
         this.totalAsset = totalAsset;
+    }
+
+    public long getThreeMonthsSavingAverage() {
+        return threeMonthsSavingAverage;
+    }
+
+    public void setThreeMonthsSavingAverage(long threeMonthsSavingAverage) {
+        this.threeMonthsSavingAverage = threeMonthsSavingAverage;
     }
 }
