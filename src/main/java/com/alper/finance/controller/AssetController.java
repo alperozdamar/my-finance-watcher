@@ -51,9 +51,7 @@ public class AssetController {
             if (diff > 0) {
                 statistic.setMonthlySavingAverage((latestAsset.getTotal() - firstAsset.getTotal()) / diff);
             }
-
             statistic.setThreeMonthsSavingAverage((latestAsset.getTotal() - threeMonthsAgoAsset.getTotal()) / diff);
-
         }
         // add to the spring model
         theModel.addAttribute("statistic", statistic);
