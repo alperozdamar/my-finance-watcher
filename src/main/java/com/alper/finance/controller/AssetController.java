@@ -34,13 +34,13 @@ public class AssetController {
         
         Statistic statistic = new Statistic();
         if (theAssets.size() > 0) {
-            Asset latestAsset = theAssets.get(theAssets.size() - 1);
+            Asset latestAsset = theAssets.get(0);
 
             
             statistic.setTotalAsset(latestAsset.getTotal());
             statistic.setReadyMoney(latestAsset.getTotal() - latestAsset.getRet401k() - latestAsset.getRetTur());
 
-            Asset firstAsset = theAssets.get(0);
+            Asset firstAsset = theAssets.get(theAssets.size() - 1);
 
             latestAsset.getDate();
             long diffInMillies = Math.abs(latestAsset.getDate().getTime() - firstAsset.getDate().getTime());
