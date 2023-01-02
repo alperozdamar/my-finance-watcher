@@ -38,6 +38,9 @@ public class Asset {
     @Column(name = "serda", columnDefinition = "int(11) default 0") 
     private int serda;
     
+    @Column(name = "debt", columnDefinition = "int(11) default 0")
+    private int debt;
+    
     private int difference;
 
     @Column(name = "total")
@@ -158,13 +161,15 @@ public class Asset {
         this.description = description;
     }
 
-    public int getSerda() {
-        return serda;
-    }
+    public int getSerda() { return serda; }
 
     public void setSerda(int serda) {
         this.serda = serda;
     }
+
+    public int getDebt() { return debt; }
+
+    public void setDebt(int debt) {        this.debt = debt; }
 
     @Override
     public String toString() {
@@ -178,6 +183,7 @@ public class Asset {
                 ", ret401k=" + ret401k +
                 ", retTur=" + retTur +
                 ", serda=" + serda +
+                ", debt=" + debt +
                 ", difference=" + difference +
                 ", total=" + total +
                 ", description='" + description + '\'' +
