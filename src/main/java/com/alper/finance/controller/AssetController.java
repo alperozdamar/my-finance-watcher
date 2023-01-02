@@ -35,7 +35,7 @@ public class AssetController {
         Statistic statistic = new Statistic();
         if (theAssets.size() > 0) {
             Asset latestAsset = theAssets.get(0);
-            Asset threeMonthsAgoAsset = theAssets.get(5);
+            Asset threeMonthsAgoAsset = theAssets.get(6);
 
 
             statistic.setTotalAsset(latestAsset.getTotal());
