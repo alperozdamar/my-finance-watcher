@@ -1,0 +1,53 @@
+name: Build, Push, and Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, reopened]
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      REPO: my-finance-watcher
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots verify -Dmaven.test.skip=true
+
+      - name: Get version from pom.xml
+        id: get_version
+        run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: |
+          docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:${{ env.VERSION }}
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest
+
+      - name: Login to DockerHub
+        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:${{ env.VERSION }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:${{ env.VERSION }}
+            docker stop ${{ env.REPO }} || true
+            docker rm ${{ env.REPO }} || true
+            docker run -d --name ${{ env.REPO }} -p 8089:8089 ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:${{ env.VERSION }} 
