@@ -50,4 +50,4 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:${{ env.VERSION }}
             docker stop ${{ env.REPO }} || true
             docker rm ${{ env.REPO }} || true
-            docker run -d --name ${{ env.REPO }} -p 8089:8089 ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:${{ env.VERSION }} 
+            docker run -d --name ${{ env.REPO }} --link mysql-standalone:mysql -p 8089:8089 ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:${{ env.VERSION }} 
