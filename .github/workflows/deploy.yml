@@ -29,7 +29,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:${{ env.VERSION }}
+          docker build --no-cache . -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:${{ env.VERSION }} 
           docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:${{ env.VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO }}:latest
 
       - name: Login to DockerHub
