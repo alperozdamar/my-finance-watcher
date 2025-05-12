@@ -1,5 +1,4 @@
-# Switch from openjdk to eclipse-temurin, but keep Java 8
-FROM eclipse-temurin:8-jre
+FROM eclipse-temurin:21-jre
 
 COPY target/*.jar my-finance-watcher.jar
 
