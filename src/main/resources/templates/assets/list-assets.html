@@ -15,6 +15,8 @@
           crossorigin="anonymous">
 
     <title>Asset Page</title>
+
+    <link rel="stylesheet" th:href="@{/css/demo.css}" type="text/css"/>
 </head>
 
 <body>
@@ -41,18 +43,18 @@
     <table class="table table-bordered table-striped">
         <thead class="thead-Success">
         <tr>
-            <th>Total Asset</th>
-            <th>Money Ready</th>
-            <th>Monthly Mortgage Payment</th>
-            <th>Average Monthly Saving (Since Sept. 2020) </th>
-            <th>Last 3 Months Avg. Saving</th>
+            <th class="compact-header">Total Asset</th>
+            <th class="compact-header">Money Ready</th>
+            <th class="compact-header">Monthly<br>Mortgage<br>Payment</th>
+            <th class="compact-header">Average Monthly<br>Saving<br>(Since Sept. 2020)</th>
+            <th class="compact-header">Last 3 Months<br>Avg. Saving</th>
         </tr>
         </thead>
         <tbody>
         <tr>
             <td th:text="'$'+ ${statistic.getTotalAsset()}"/>
             <td th:text="'$'+${statistic.getReadyMoney()}"/>
-            <td th:text="2991"/>
+            <td th:text="'$'+2991"/>
             <td th:text="'$'+${statistic.getMonthlySavingAverage()}"/>
             <td th:text="'$'+${statistic.getThreeMonthsSavingAverage()}"/>
         </tr>
@@ -74,12 +76,14 @@
             <th>Difference</th>
             <th>Total</th>
             <th>Description</th>
+            <th>Money Ready</th>
+            <th>Change in Money Ready</th>
             <th>Action</th>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:each="tempAsset : ${assets}">
+        <tr th:each="tempAsset, iterStat : ${assets}">
             <td th:text="${#dates.format(tempAsset.date, 'MM-dd-yyyy')}"></td>
             <td th:text="'$'+${tempAsset.boa}"/>
             <td th:text="'$'+${tempAsset.chase}"/>
@@ -92,6 +96,14 @@
             <td th:text="${tempAsset.difference}"/>
             <td th:text="'$'+${tempAsset.total}"/>
             <td th:text="${tempAsset.description}"/>
+            <td th:text="'$'+${tempAsset.moneyReady}">
+            </td>
+            <td>
+                <span th:if="${iterStat.index < assets.size() - 1}">
+                    <span th:if="${tempAsset.moneyReady > assets[iterStat.index+1].moneyReady}" style="color:green;">&#8593;</span>
+                    <span th:if="${tempAsset.moneyReady < assets[iterStat.index+1].moneyReady}" style="color:red;">&#8595;</span>
+                </span>
+            </td>
 
             <td>
                 <div sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">

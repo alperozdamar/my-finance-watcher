@@ -49,6 +49,9 @@ public class Asset {
     @Column(name = "description")
     private String description;
     
+    @Transient
+    private int moneyReady;
+
     // define constructors
     public Asset() {
     }
@@ -170,6 +173,10 @@ public class Asset {
     public int getDebt() { return debt; }
 
     public void setDebt(int debt) {        this.debt = debt; }
+
+    public int getMoneyReady() {
+        return boa + chase + hsbcTr + stock + serda - debt;
+    }
 
     @Override
     public String toString() {

@@ -2,3 +2,19 @@
     font-style: italic;
     color: green;
 }
+.narrow-col {
+    max-width: 10px;
+    white-space: normal;
+    word-break: break-word;
+    vertical-align: middle !important;
+}
+
+th.compact-header {
+    max-width: 60px;   /* Adjust as needed */
+    min-width: 30px;   /* Optional: set a minimum */
+    white-space: normal !important;
+    word-break: break-word;
+    text-align: left;
+    vertical-align: middle;
+}
+
