@@ -63,13 +63,13 @@
 
     <script th:inline="javascript">
         /*<![CDATA[*/
-        var assetDates = [[${assetDates}]];
-        var totalAssets = [[${totalAssets}]];
-        var moneyReady = [[${moneyReady}]];
+        var assetDates = [[${assetDates}]],
+            totalAssets = [[${totalAssets}]],
+            moneyReady = [[${moneyReady}]];
 
-        var ytdAssetDates = [[${ytdAssetDates}]];
-        var ytdTotalAssets = [[${ytdTotalAssets}]];
-        var ytdMoneyReady = [[${ytdMoneyReady}]];
+        var ytdAssetDates = [[${ytdAssetDates}]],
+            ytdTotalAssets = [[${ytdTotalAssets}]],
+            ytdMoneyReady = [[${ytdMoneyReady}]];
         /*]]>*/
     </script>
 
@@ -88,6 +88,8 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script th:src="@{/js/trend-chart.js}"></script>
+
+    <a th:href="@{/yearly-tracker}" class="btn btn-primary">Go to Yearly Expense & Income Tracker</a>
 
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">

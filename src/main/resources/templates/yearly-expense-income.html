@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Yearly Expense & Income Tracker</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { background: #fff; }
+        .full-width-container {
+            width: 80%;
+            margin: 0 auto;
+            padding-left: 0;
+            padding-right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="full-width-container mt-4 px-4">
+        <a th:href="@{/assets/list-assets}" class="btn btn-secondary mb-3">Back to Assets</a>
+        <h1>Yearly Expense & Income Tracker</h1>
+        <form th:action="@{/yearly-tracker}" method="get">
+            <div class="form-group">
+                <label for="year">Select Year:</label>
+                <input type="number" id="year" name="year" th:value="${year}" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">View</button>
+        </form>
+
+        <!-- Summary Table at the Top -->
+        <table class="table table-bordered mb-4 mt-4">
+            <thead class="thead-light">
+                <tr>
+                    <th class="text-center">Total Income</th>
+                    <th class="text-center">Total Expense</th>
+                    <th class="text-center">Net</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center" th:text="${totalIncome}"></td>
+                    <td class="text-center" th:text="${totalExpense}"></td>
+                    <td class="text-center font-weight-bold" th:text="${netDiff}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Categories Row -->
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="mt-4">Expense Categories</h2>
+                <ul th:each="category : ${expenseCategories}">
+                    <li>
+                        <span th:text="${category.name}"></span>
+                        <form th:action="@{/yearly-tracker/expense-category/{id}(id=${category.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this category?');">
+                            <input type="hidden" name="year" th:value="${year}" />
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </li>
+                </ul>
+                <!-- Add Category Form -->
+                <form th:action="@{/yearly-tracker/expense-category}" method="post" class="form-inline mt-2">
+                    <input type="text" name="name" placeholder="New Category" class="form-control mr-2" required>
+                    <input type="hidden" name="year" th:value="${year}">
+                    <button type="submit" class="btn btn-success btn-sm">Add Expense Category</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h2 class="mt-4">Income Categories</h2>
+                <ul th:each="category : ${incomeCategories}">
+                    <li>
+                        <span th:text="${category.name}"></span>
+                        <form th:action="@{/yearly-tracker/income-category/{id}(id=${category.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this category?');">
+                            <input type="hidden" name="year" th:value="${year}" />
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </li>
+                </ul>
+                <!-- Add Income Category Form -->
+                <form th:action="@{/yearly-tracker/income-category}" method="post" class="form-inline mt-2">
+                    <input type="text" name="name" placeholder="New Category" class="form-control mr-2" required>
+                    <input type="hidden" name="year" th:value="${year}">
+                    <button type="submit" class="btn btn-success btn-sm">Add Income Category</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Monthly Data Row -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h2>Monthly Expenses</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="expense : ${yearlyExpenses}">
+                            <td th:text="${expenseCategoryNames[expense.categoryId]}"></td>
+                            <td th:text="${expense.amount}"></td>
+                            <td>
+                                <form th:action="@{/yearly-tracker/yearly-expense/{id}(id=${expense.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this expense?');">
+                                    <input type="hidden" name="year" th:value="${year}" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Add Expense Form -->
+                <form th:action="@{/yearly-tracker/yearly-expense}" method="post" class="form-inline mt-2">
+                    <select name="categoryId" class="form-control mr-2" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option th:each="cat : ${expenseCategories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                    </select>
+                    <input type="number" name="amount" placeholder="Amount" class="form-control mr-2" required>
+                    <input type="hidden" name="year" th:value="${year}">
+                    <button type="submit" class="btn btn-success btn-sm">Add Expense</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h2>Monthly Incomes</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="income : ${yearlyIncomes}">
+                            <td th:text="${incomeCategoryNames[income.categoryId]}"></td>
+                            <td th:text="${income.amount}"></td>
+                            <td>
+                                <form th:action="@{/yearly-tracker/yearly-income/{id}(id=${income.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this income?');">
+                                    <input type="hidden" name="year" th:value="${year}" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Add Income Form -->
+                <form th:action="@{/yearly-tracker/yearly-income}" method="post" class="form-inline mt-2">
+                    <select name="categoryId" class="form-control mr-2" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option th:each="cat : ${incomeCategories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                    </select>
+                    <input type="number" name="amount" placeholder="Amount" class="form-control mr-2" required>
+                    <input type="hidden" name="year" th:value="${year}">
+                    <button type="submit" class="btn btn-success btn-sm">Add Income</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
