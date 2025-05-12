@@ -1,81 +1,95 @@
-# my-finance-watcher
-SpringBoot+SpringMVC+Hibernate+thymeleaf Application
+# My Finance Watcher
 
-mvn install -Dmaven.test.skip=true
+A personal finance tracking web application for managing assets, expenses, and incomes, with historical charts and yearly/monthly breakdowns.
 
-docker build . -t my-finance-watcher-1.0.0
+## Features
+- Asset tracking with detailed breakdowns
+- Yearly and monthly expense & income tracker
+- Dynamic charts for asset and money-ready trends
+- User-based data (multi-user ready)
+- CI/CD with GitHub Actions and Docker
 
-docker run -p 8089:8089 --name my-finance-watcher-1.0.0 --link mysql-standalone:mysql -d my-finance-watcher-1.0.0
+## Tech Stack
+- Java 8, Spring Boot
+- Thymeleaf (HTML templates)
+- MySQL (database)
+- Docker (containerization)
+- GitHub Actions (CI/CD)
 
-Check Container:
+---
 
-docker exec -ti my-finance-watcher-1.0.0 bash 
+## Running Locally
 
-Check Logs: 
+### 1. Clone the Repository
+```sh
+git clone https://github.com/yourusername/my-finance-watcher.git
+cd my-finance-watcher
+```
 
-docker logs my-finance-watcher-1.0.0
+### 2. Start MySQL with Docker
+You can use the provided `docker-compose.local.yml` or run MySQL manually:
 
-Tail Logs:
+**Using Docker Compose:**
+```sh
+docker-compose -f docker-compose.local.yml up -d
+```
 
-docker logs my-finance-watcher-1.0.0 --follow
+**Or, run MySQL manually:**
+```sh
+docker run --name mysql-standalone -e MYSQL_ROOT_PASSWORD=yourpassword -e MYSQL_DATABASE=myfinance -p 3306:3306 -d mysql:8
+```
 
-Runs successfully: 
+### 3. Configure Database Connection
+Edit `src/main/resources/application.properties` if needed:
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/myfinance
+spring.datasource.username=root
+spring.datasource.password=yourpassword
+```
 
-mvn spring-boot:run
+### 4. Build the Application
+```sh
+./mvnw clean package -DskipTests
+```
 
-MYSQL : 
+### 5. Run the Application
+**With Maven:**
+```sh
+./mvnw spring-boot:run
+```
+**Or, with the JAR:**
+```sh
+java -jar target/my-finance-watcher-1.0.0.jar
+```
 
-docker pull mysql:5.6
+The app will be available at [http://localhost:8089](http://localhost:8089)
 
-docker run --name mysql-standalone -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=test -e MYSQL_USER=sa -e MYSQL_PASSWORD=password -d mysql:5.6
+### 6. (Optional) Run with Docker
+Build and run the app in Docker:
+```sh
+docker build -t my-finance-watcher:local .
+docker run --name my-finance-watcher --link mysql-standalone:mysql -p 8089:8089 my-finance-watcher:local
+```
 
-docker exec -ti mysql-standalone bash  
+---
 
-mysql -u sa -p'password' (mysql -u $USERNAME -p'$PASSWORD')
+## Database Initialization
+- The app will auto-create tables on first run if the database is empty.
+- To import sample data:
+  ```sh
+  mysql -u root -p myfinance < myfinance_2025-05-12.sql
+  ```
 
-show databases;
+---
 
-use test;
+## CI/CD & Deployment
+- CI/CD is handled via GitHub Actions (`.github/workflows/deploy.yml`).
+- On push to `main`, the app is built, Dockerized, pushed to Docker Hub, and deployed to your EC2 instance.
 
-show tables;
+---
 
-
-CREATE TABLE IF NOT EXISTS `users` (
-  `username` varchar(50) NOT NULL,
-  `password` char(68) NOT NULL,
-  `enabled` tinyint(1) NOT NULL,
-  PRIMARY KEY (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- Dumping data for table my_finance_db.users: ~4 rows (approximately)
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT IGNORE INTO `users` (`username`, `password`, `enabled`) VALUES
-	('alper', '{noop}123', 1),
-	('john', '{bcrypt}$2y$12$2uyIQbVvq2STqGm8BZZpy.NHqm2KHyH8OrItzqDXk.AsiuPdu.D4O', 1),
-	('mary', '{bcrypt}$2a$04$eFytJDGtjbThXa80FyOOBuFdK2IwjyWefYkMpiBEFlpBwDH.5PM0K', 1),
-	('susan', '{noop}test123', 1);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-
-
--- Dumping structure for table my_finance_db.authorities
-CREATE TABLE IF NOT EXISTS `authorities` (
-  `username` varchar(50) NOT NULL,
-  `authority` varchar(50) NOT NULL,
-  UNIQUE KEY `authorities_idx_1` (`username`,`authority`),
-  CONSTRAINT `FK1_authorities_username_users_username` FOREIGN KEY (`username`) REFERENCES `users` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- Dumping data for table my_finance_db.authorities: ~7 rows (approximately)
-/*!40000 ALTER TABLE `authorities` DISABLE KEYS */;
-INSERT IGNORE INTO `authorities` (`username`, `authority`) VALUES
-	('alper', 'ROLE_ADMIN'),
-	('alper', 'ROLE_EMPLOYEE'),
-	('john', 'ROLE_EMPLOYEE'),
-	('mary', 'ROLE_EMPLOYEE'),
-	('mary', 'ROLE_MANAGER'),
-	('susan', 'ROLE_ADMIN'),
-	('susan', 'ROLE_EMPLOYEE');
-/*!40000 ALTER TABLE `authorities` ENABLE KEYS */;
+## License
+MIT
 
 
 
