@@ -1,6 +1,11 @@
 ## 📦 Releases / Changelog
 
-### v2.0.0 - Transition to GitHub Actions (Current)
+### v2.0.1 - Displaying the running version in the footer (Current)
+- **[MFW-8](https://github.com/alperozdamar/my-finance-watcher/pull/18)** - Displaying the running version in the footer
+
+---
+
+### v2.0.0 - Transition to GitHub Actions 
 ✅ **Migrated from Jenkins + Ansible to GitHub Actions for CI/CD**  
 _Previously, the project relied on a Jenkins server for CI/CD and Ansible for Kubernetes deployments. Starting with this version, the project fully transitions to GitHub Actions._
 
