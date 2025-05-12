@@ -47,15 +47,23 @@
         <div class="row">
             <div class="col-md-6">
                 <h2 class="mt-4">Expense Categories</h2>
-                <ul th:each="category : ${expenseCategories}">
-                    <li>
-                        <span th:text="${category.name}"></span>
-                        <form th:action="@{/yearly-tracker/expense-category/{id}(id=${category.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this category?');">
-                            <input type="hidden" name="year" th:value="${year}" />
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                        </form>
-                    </li>
-                </ul>
+                <form th:action="@{/yearly-tracker/expense-category/0}" method="post" class="form-inline mt-2" id="deleteExpenseCategoryForm">
+                    <select name="categoryId" class="form-control mr-2" id="expenseCategorySelect" required>
+                        <option value="" disabled selected>Select Category to Delete</option>
+                        <option th:each="cat : ${expenseCategories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                    </select>
+                    <input type="hidden" name="year" th:value="${year}" />
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var select = document.getElementById('expenseCategorySelect');
+                        var form = document.getElementById('deleteExpenseCategoryForm');
+                        select.addEventListener('change', function() {
+                            form.action = '/yearly-tracker/expense-category/' + select.value;
+                        });
+                    });
+                </script>
                 <!-- Add Category Form -->
                 <form th:action="@{/yearly-tracker/expense-category}" method="post" class="form-inline mt-2">
                     <input type="text" name="name" placeholder="New Category" class="form-control mr-2" required>
@@ -65,15 +73,23 @@
             </div>
             <div class="col-md-6">
                 <h2 class="mt-4">Income Categories</h2>
-                <ul th:each="category : ${incomeCategories}">
-                    <li>
-                        <span th:text="${category.name}"></span>
-                        <form th:action="@{/yearly-tracker/income-category/{id}(id=${category.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this category?');">
-                            <input type="hidden" name="year" th:value="${year}" />
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                        </form>
-                    </li>
-                </ul>
+                <form th:action="@{/yearly-tracker/income-category/0}" method="post" class="form-inline mt-2" id="deleteIncomeCategoryForm">
+                    <select name="categoryId" class="form-control mr-2" id="incomeCategorySelect" required>
+                        <option value="" disabled selected>Select Category to Delete</option>
+                        <option th:each="cat : ${incomeCategories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                    </select>
+                    <input type="hidden" name="year" th:value="${year}" />
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var select = document.getElementById('incomeCategorySelect');
+                        var form = document.getElementById('deleteIncomeCategoryForm');
+                        select.addEventListener('change', function() {
+                            form.action = '/yearly-tracker/income-category/' + select.value;
+                        });
+                    });
+                </script>
                 <!-- Add Income Category Form -->
                 <form th:action="@{/yearly-tracker/income-category}" method="post" class="form-inline mt-2">
                     <input type="text" name="name" placeholder="New Category" class="form-control mr-2" required>
