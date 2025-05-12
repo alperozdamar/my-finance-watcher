@@ -74,6 +74,7 @@
             <th>Difference</th>
             <th>Total</th>
             <th>Description</th>
+            <th>Money Ready</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -92,6 +93,7 @@
             <td th:text="${tempAsset.difference}"/>
             <td th:text="'$'+${tempAsset.total}"/>
             <td th:text="${tempAsset.description}"/>
+            <td th:text="'$'+${tempAsset.moneyReady}"/>
 
             <td>
                 <div sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
