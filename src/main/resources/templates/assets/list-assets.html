@@ -63,26 +63,26 @@
 
     <script th:inline="javascript">
         /*<![CDATA[*/
-        var assetDates = [[${assetDates}]];
-        var totalAssets = [[${totalAssets}]];
-        var moneyReady = [[${moneyReady}]];
+        var assetDates = [[${assetDates}]],
+            totalAssets = [[${totalAssets}]],
+            moneyReady = [[${moneyReady}]];
 
-        var ytdAssetDates = [[${ytdAssetDates}]];
-        var ytdTotalAssets = [[${ytdTotalAssets}]];
-        var ytdMoneyReady = [[${ytdMoneyReady}]];
+        var ytdAssetDates = [[${ytdAssetDates}]],
+            ytdTotalAssets = [[${ytdTotalAssets}]],
+            ytdMoneyReady = [[${ytdMoneyReady}]];
         /*]]>*/
     </script>
 
+    <div class="mb-3">
+        <button class="btn btn-info mb-3" onclick="showTrendChart(assetDates, totalAssets, moneyReady, 'All Historical Data')">
+            Show All Historical Chart
+        </button>
+        <button class="btn btn-secondary mb-3" onclick="showTrendChart(ytdAssetDates, ytdTotalAssets, ytdMoneyReady, 'Year-to-Date Trend')">
+            Show Year-to-Date Chart
+        </button>
+        <a th:href="@{/tracker}" class="btn btn-info mb-3">Expense & Income Tracker</a>
+    </div>
 
-
-
-    <button class="btn btn-info mb-3" onclick="showTrendChart(assetDates, totalAssets, moneyReady, 'All Historical Data')">
-        Show All Historical Chart
-    </button>
-
-    <button class="btn btn-secondary mb-3" onclick="showTrendChart(ytdAssetDates, ytdTotalAssets, ytdMoneyReady, 'Year-to-Date Trend')">
-        Show Year-to-Date Chart
-    </button>
     <div id="trendChartContainer" style="display:none; margin-bottom: 24px;">
         <canvas id="trendChart" height="80"></canvas>
     </div>
