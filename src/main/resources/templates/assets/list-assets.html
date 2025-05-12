@@ -93,7 +93,14 @@
             <td th:text="${tempAsset.difference}"/>
             <td th:text="'$'+${tempAsset.total}"/>
             <td th:text="${tempAsset.description}"/>
-            <td th:text="'$'+${tempAsset.moneyReady}"/>
+            <td th:text="'$'+${tempAsset.moneyReady}">
+            </td>
+            <td>
+                <span th:if="${iterStat.index > 0}">
+                    <span th:if="${tempAsset.moneyReady > ${assets[iterStat.index-1].moneyReady}}" style="color:green;">&#8593;</span>
+                    <span th:if="${tempAsset.moneyReady < ${assets[iterStat.index-1].moneyReady}}" style="color:red;">&#8595;</span>
+                </span>
+            </td>
 
             <td>
                 <div sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
