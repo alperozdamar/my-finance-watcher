@@ -1,0 +1,28 @@
+## 📦 Releases / Changelog
+
+### v2.0.0 - Transition to GitHub Actions (Current)
+✅ **Migrated from Jenkins + Ansible to GitHub Actions for CI/CD**  
+_Previously, the project relied on a Jenkins server for CI/CD and Ansible for Kubernetes deployments. Starting with this version, the project fully transitions to GitHub Actions._
+
+- **[MFW-6](https://github.com/alperozdamar/my-finance-watcher/pull/14)** - Remove legacy unused codes.
+- **[MFW-5](https://github.com/alperozdamar/my-finance-watcher/pull/12)** - Delete unnecessary files (Ansible, Kubernetes, hosts)
+- **[MFW-4](https://github.com/alperozdamar/my-finance-watcher/pull/10)** - Add Monthly Expense & Income Tracker
+- **[MFW-3](https://github.com/alperozdamar/my-finance-watcher/pull/8)** - Add Historical Chart (Trend Line)
+- **[MFW-2](https://github.com/alperozdamar/my-finance-watcher/pull/6)** - Add "Money Ready" field for each Asset record
+- **[MFW-1](https://github.com/alperozdamar/my-finance-watcher/pull/4)** - Create GitHub Actions Runner CI/CD
+
+---
+
+### v1.0.0 - Legacy Jenkins + Ansible (Deprecated)
+- **Initial version running on Jenkins server for builds and Ansible for Kubernetes deployment.**
+- _This version is now deprecated in favor of GitHub Actions-based automation starting from v2.0.0._
+
+---
+
+## 📌 Template for Future Releases
+
+```markdown
+### vX.Y.Z - [Title of the Release]
+
+- **[MFW-XXX](https://github.com/alperozdamar/my-finance-watcher/pull/XXX)** - Short Description
+- **[MFW-XXX](https://github.com/alperozdamar/my-finance-watcher/pull/XXX)** - Short Description
