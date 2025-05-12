@@ -97,8 +97,8 @@
             </td>
             <td>
                 <span th:if="${iterStat.index > 0}">
-                    <span th:if="${tempAsset.moneyReady > ${assets[iterStat.index-1].moneyReady}}" style="color:green;">&#8593;</span>
-                    <span th:if="${tempAsset.moneyReady < ${assets[iterStat.index-1].moneyReady}}" style="color:red;">&#8595;</span>
+                    <span th:if="${tempAsset.moneyReady > assets[iterStat.index-1].moneyReady}" style="color:green;">&#8593;</span>
+                    <span th:if="${tempAsset.moneyReady < assets[iterStat.index-1].moneyReady}" style="color:red;">&#8595;</span>
                 </span>
             </td>
 
