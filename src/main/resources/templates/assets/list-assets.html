@@ -73,23 +73,21 @@
         /*]]>*/
     </script>
 
+    <div class="mb-3">
+        <button class="btn btn-info mb-3" onclick="showTrendChart(assetDates, totalAssets, moneyReady, 'All Historical Data')">
+            Show All Historical Chart
+        </button>
+        <button class="btn btn-secondary mb-3" onclick="showTrendChart(ytdAssetDates, ytdTotalAssets, ytdMoneyReady, 'Year-to-Date Trend')">
+            Show Year-to-Date Chart
+        </button>
+        <a th:href="@{/yearly-tracker}" class="btn btn-info mb-3">Expense & Income Tracker</a>
+    </div>
 
-
-
-    <button class="btn btn-info mb-3" onclick="showTrendChart(assetDates, totalAssets, moneyReady, 'All Historical Data')">
-        Show All Historical Chart
-    </button>
-
-    <button class="btn btn-secondary mb-3" onclick="showTrendChart(ytdAssetDates, ytdTotalAssets, ytdMoneyReady, 'Year-to-Date Trend')">
-        Show Year-to-Date Chart
-    </button>
     <div id="trendChartContainer" style="display:none; margin-bottom: 24px;">
         <canvas id="trendChart" height="80"></canvas>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script th:src="@{/js/trend-chart.js}"></script>
-
-    <a th:href="@{/yearly-tracker}" class="btn btn-primary">Go to Yearly Expense & Income Tracker</a>
 
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
