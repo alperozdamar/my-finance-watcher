@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: myfinance-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: myfinance
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+    networks:
+      - myfinance-net
+
+volumes:
+  mysql_data:
+
+networks:
+  myfinance-net:
