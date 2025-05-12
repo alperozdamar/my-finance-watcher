@@ -1,6 +1,7 @@
-FROM openjdk:8
-ADD target/my-finance-watcher-1.0.0.jar my-finance-watcher-1.0.0.jar
+FROM eclipse-temurin:21-jre
+
+COPY target/*.jar my-finance-watcher.jar
+
 EXPOSE 8089
-ENTRYPOINT ["java", "-jar", "my-finance-watcher-1.0.0.jar"]
 
-
+ENTRYPOINT ["java", "-jar", "my-finance-watcher.jar"]

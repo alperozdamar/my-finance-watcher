@@ -4,6 +4,7 @@
 ✅ **Migrated from Jenkins + Ansible to GitHub Actions for CI/CD**  
 _Previously, the project relied on a Jenkins server for CI/CD and Ansible for Kubernetes deployments. Starting with this version, the project fully transitions to GitHub Actions._
 
+- **[MFW-7](https://github.com/alperozdamar/my-finance-watcher/pull/15)** - Replace AdoptOpenJDK with Temurin in GitHub Actions and Java Upgrade to 21
 - **[MFW-6](https://github.com/alperozdamar/my-finance-watcher/pull/14)** - Remove legacy unused codes.
 - **[MFW-5](https://github.com/alperozdamar/my-finance-watcher/pull/12)** - Delete unnecessary files (Ansible, Kubernetes, hosts)
 - **[MFW-4](https://github.com/alperozdamar/my-finance-watcher/pull/10)** - Add Monthly Expense & Income Tracker
