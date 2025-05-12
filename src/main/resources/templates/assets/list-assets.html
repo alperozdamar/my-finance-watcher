@@ -15,6 +15,8 @@
           crossorigin="anonymous">
 
     <title>Asset Page</title>
+
+    <link rel="stylesheet" th:href="@{/css/demo.css}" type="text/css"/>
 </head>
 
 <body>
@@ -41,18 +43,18 @@
     <table class="table table-bordered table-striped">
         <thead class="thead-Success">
         <tr>
-            <th>Total Asset</th>
-            <th>Money Ready</th>
-            <th>Monthly Mortgage Payment</th>
-            <th>Average Monthly Saving (Since Sept. 2020) </th>
-            <th>Last 3 Months Avg. Saving</th>
+            <th class="compact-header">Total Asset</th>
+            <th class="compact-header">Money Ready</th>
+            <th class="compact-header">Monthly<br>Mortgage<br>Payment</th>
+            <th class="compact-header">Average Monthly<br>Saving<br>(Since Sept. 2020)</th>
+            <th class="compact-header">Last 3 Months<br>Avg. Saving</th>
         </tr>
         </thead>
         <tbody>
         <tr>
             <td th:text="'$'+ ${statistic.getTotalAsset()}"/>
             <td th:text="'$'+${statistic.getReadyMoney()}"/>
-            <td th:text="2991"/>
+            <td th:text="'$'+2991"/>
             <td th:text="'$'+${statistic.getMonthlySavingAverage()}"/>
             <td th:text="'$'+${statistic.getThreeMonthsSavingAverage()}"/>
         </tr>
