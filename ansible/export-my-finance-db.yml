@@ -1,9 +1,0 @@
----
-- hosts: all
-  become: true
-  tasks:
-    - name: Export My Finance DB(mysql-standalone)
-      command: docker exec mysql-standalone sh -c 'exec mysqldump --all-databases -uroot -p"password"' > all-databases.sql
-      ignore_errors: yes
-
-
