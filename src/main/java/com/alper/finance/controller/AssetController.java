@@ -6,6 +6,9 @@ import com.alper.finance.service.AssetService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import java.util.Date;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -170,6 +173,12 @@ public class AssetController {
         return "redirect:list";
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
 
 }
 

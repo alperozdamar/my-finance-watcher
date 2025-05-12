@@ -45,7 +45,7 @@
     <input type="hidden" th:field="*{id}"/>
 
     <th>Date</th>
-    <input id="datepicker" type="text" th:field="*{date}"
+    <input type="date" th:field="*{date}" th:value="${#dates.format(asset.date, 'yyyy-MM-dd')}"
            class="form-control mb-4 col-4" placeholder="Date"/>
 
 
