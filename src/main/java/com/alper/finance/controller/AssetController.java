@@ -7,8 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/assets")
@@ -58,6 +62,51 @@ public class AssetController {
         theModel.addAttribute("assets", theAssets);
 
 
+        // Prepare assetDates, totalAssets, and moneyReady as JSON-friendly lists
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-yyyy");
+        LocalDate oneYearAgoDate = LocalDate.now().minusYears(1);
+
+        List<Asset> ytdAssets = theAssets.stream()
+                .filter(asset -> asset.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(oneYearAgoDate))
+                .collect(Collectors.toList());
+
+        List<String> assetDates = theAssets.stream()
+                .map(asset -> formatter.format(asset.getDate()))
+                .collect(Collectors.toList());
+
+        List<Integer> totalAssets = theAssets.stream()
+                .map(Asset::getTotal)
+                .collect(Collectors.toList());
+
+        List<Integer> moneyReady = theAssets.stream()
+                .map(Asset::getMoneyReady)
+                .collect(Collectors.toList());
+
+        List<String> ytdAssetDates = ytdAssets.stream()
+                .map(asset -> formatter.format(asset.getDate()))
+                .collect(Collectors.toList());
+
+        List<Integer> ytdTotalAssets = ytdAssets.stream()
+                .map(Asset::getTotal)
+                .collect(Collectors.toList());
+
+        List<Integer> ytdMoneyReady = ytdAssets.stream()
+                .map(Asset::getMoneyReady)
+                .collect(Collectors.toList());
+
+        theModel.addAttribute("assetDates", assetDates);
+        theModel.addAttribute("totalAssets", totalAssets);
+        theModel.addAttribute("moneyReady", moneyReady);
+
+        theModel.addAttribute("ytdAssetDates", ytdAssetDates);
+        theModel.addAttribute("ytdTotalAssets", ytdTotalAssets);
+        theModel.addAttribute("ytdMoneyReady", ytdMoneyReady);
+
+
+        theModel.addAttribute("assetDates", assetDates);
+        theModel.addAttribute("totalAssets", totalAssets);
+        theModel.addAttribute("moneyReady", moneyReady);
+        
         return "assets/list-assets";
     }
 

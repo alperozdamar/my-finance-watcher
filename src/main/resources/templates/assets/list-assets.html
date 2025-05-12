@@ -61,6 +61,34 @@
         </tbody>
     </table>
 
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var assetDates = [[${assetDates}]];
+        var totalAssets = [[${totalAssets}]];
+        var moneyReady = [[${moneyReady}]];
+
+        var ytdAssetDates = [[${ytdAssetDates}]];
+        var ytdTotalAssets = [[${ytdTotalAssets}]];
+        var ytdMoneyReady = [[${ytdMoneyReady}]];
+        /*]]>*/
+    </script>
+
+
+
+
+    <button class="btn btn-info mb-3" onclick="showTrendChart(assetDates, totalAssets, moneyReady, 'All Historical Data')">
+        Show All Historical Chart
+    </button>
+
+    <button class="btn btn-secondary mb-3" onclick="showTrendChart(ytdAssetDates, ytdTotalAssets, ytdMoneyReady, 'Year-to-Date Trend')">
+        Show Year-to-Date Chart
+    </button>
+    <div id="trendChartContainer" style="display:none; margin-bottom: 24px;">
+        <canvas id="trendChart" height="80"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/trend-chart.js}"></script>
+
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
         <tr>
