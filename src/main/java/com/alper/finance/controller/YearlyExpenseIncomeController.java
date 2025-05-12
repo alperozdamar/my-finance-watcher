@@ -22,7 +22,10 @@ public class YearlyExpenseIncomeController {
     private ExpenseIncomeService expenseIncomeService;
 
     @GetMapping
-    public String viewYearlyTracker(Model model, @RequestParam(defaultValue = "2023") int year) {
+    public String viewYearlyTracker(Model model, @RequestParam(required = false) Integer year) {
+        if (year == null) {
+            year = java.time.Year.now().getValue();
+        }
         // Fetch expense and income categories for the given year
         List<ExpenseCategory> expenseCategories = expenseIncomeService.getExpenseCategories(1, year); // Assuming userId=1 for now
         List<IncomeCategory> incomeCategories = expenseIncomeService.getIncomeCategories(1, year);
