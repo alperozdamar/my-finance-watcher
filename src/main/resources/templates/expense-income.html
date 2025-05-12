@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Yearly Expense & Income Tracker</title>
+    <title>Expense & Income Tracker</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body { background: #fff; }
@@ -17,7 +17,7 @@
     <div class="full-width-container mt-4 px-4">
         <a th:href="@{/assets/list}" class="btn btn-secondary mb-3">Back to Assets</a>
         <h1>Monthly Expense & Income Tracker</h1>
-        <form th:action="@{/yearly-tracker}" method="get" id="yearForm">
+        <form th:action="@{/tracker}" method="get" id="yearForm">
             <div class="form-group">
                 <label for="year">Select Year:</label>
                 <select id="year" name="year" class="form-control" onchange="document.getElementById('yearForm').submit()">
@@ -49,7 +49,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h2 class="mt-4">Expense Categories</h2>
-                <form th:action="@{/yearly-tracker/expense-category/0}" method="post" class="form-inline mt-2" id="deleteExpenseCategoryForm">
+                <form th:action="@{/tracker/expense-category/0}" method="post" class="form-inline mt-2" id="deleteExpenseCategoryForm">
                     <select name="categoryId" class="form-control mr-2" id="expenseCategorySelect" required>
                         <option value="" disabled selected>Select Category to Delete</option>
                         <option th:each="cat : ${expenseCategories}" th:value="${cat.id}" th:text="${cat.name}"></option>
@@ -62,12 +62,12 @@
                         var select = document.getElementById('expenseCategorySelect');
                         var form = document.getElementById('deleteExpenseCategoryForm');
                         select.addEventListener('change', function() {
-                            form.action = '/yearly-tracker/expense-category/' + select.value;
+                            form.action = '/tracker/expense-category/' + select.value;
                         });
                     });
                 </script>
                 <!-- Add Category Form -->
-                <form th:action="@{/yearly-tracker/expense-category}" method="post" class="form-inline mt-2">
+                <form th:action="@{/tracker/expense-category}" method="post" class="form-inline mt-2">
                     <input type="text" name="name" placeholder="New Category" class="form-control mr-2" required>
                     <input type="hidden" name="year" th:value="${year}">
                     <button type="submit" class="btn btn-success btn-sm">Add Expense Category</button>
@@ -75,7 +75,7 @@
             </div>
             <div class="col-md-6">
                 <h2 class="mt-4">Income Categories</h2>
-                <form th:action="@{/yearly-tracker/income-category/0}" method="post" class="form-inline mt-2" id="deleteIncomeCategoryForm">
+                <form th:action="@{/tracker/income-category/0}" method="post" class="form-inline mt-2" id="deleteIncomeCategoryForm">
                     <select name="categoryId" class="form-control mr-2" id="incomeCategorySelect" required>
                         <option value="" disabled selected>Select Category to Delete</option>
                         <option th:each="cat : ${incomeCategories}" th:value="${cat.id}" th:text="${cat.name}"></option>
@@ -88,12 +88,12 @@
                         var select = document.getElementById('incomeCategorySelect');
                         var form = document.getElementById('deleteIncomeCategoryForm');
                         select.addEventListener('change', function() {
-                            form.action = '/yearly-tracker/income-category/' + select.value;
+                            form.action = '/tracker/income-category/' + select.value;
                         });
                     });
                 </script>
                 <!-- Add Income Category Form -->
-                <form th:action="@{/yearly-tracker/income-category}" method="post" class="form-inline mt-2">
+                <form th:action="@{/tracker/income-category}" method="post" class="form-inline mt-2">
                     <input type="text" name="name" placeholder="New Category" class="form-control mr-2" required>
                     <input type="hidden" name="year" th:value="${year}">
                     <button type="submit" class="btn btn-success btn-sm">Add Income Category</button>
@@ -114,11 +114,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="expense : ${yearlyExpenses}">
+                        <tr th:each="expense : ${Expenses}">
                             <td th:text="${expenseCategoryNames[expense.categoryId]}"></td>
                             <td th:text="${expense.amount}"></td>
                             <td>
-                                <form th:action="@{/yearly-tracker/yearly-expense/{id}(id=${expense.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this expense?');">
+                                <form th:action="@{/tracker/expense/{id}(id=${expense.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this expense?');">
                                     <input type="hidden" name="year" th:value="${year}" />
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
@@ -127,7 +127,7 @@
                     </tbody>
                 </table>
                 <!-- Add Expense Form -->
-                <form th:action="@{/yearly-tracker/yearly-expense}" method="post" class="form-inline mt-2">
+                <form th:action="@{/tracker/expense}" method="post" class="form-inline mt-2">
                     <select name="categoryId" class="form-control mr-2" required>
                         <option value="" disabled selected>Select Category</option>
                         <option th:each="cat : ${expenseCategories}" th:value="${cat.id}" th:text="${cat.name}"></option>
@@ -148,11 +148,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="income : ${yearlyIncomes}">
+                        <tr th:each="income : ${Incomes}">
                             <td th:text="${incomeCategoryNames[income.categoryId]}"></td>
                             <td th:text="${income.amount}"></td>
                             <td>
-                                <form th:action="@{/yearly-tracker/yearly-income/{id}(id=${income.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this income?');">
+                                <form th:action="@{/tracker/income/{id}(id=${income.id})}" method="post" style="display:inline;" onsubmit="return confirm('Delete this income?');">
                                     <input type="hidden" name="year" th:value="${year}" />
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
@@ -161,7 +161,7 @@
                     </tbody>
                 </table>
                 <!-- Add Income Form -->
-                <form th:action="@{/yearly-tracker/yearly-income}" method="post" class="form-inline mt-2">
+                <form th:action="@{/tracker/income}" method="post" class="form-inline mt-2">
                     <select name="categoryId" class="form-control mr-2" required>
                         <option value="" disabled selected>Select Category</option>
                         <option th:each="cat : ${incomeCategories}" th:value="${cat.id}" th:text="${cat.name}"></option>

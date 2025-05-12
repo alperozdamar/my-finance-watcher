@@ -14,9 +14,9 @@ public class ExpenseIncomeServiceImpl implements ExpenseIncomeService {
     @Autowired
     private IncomeCategoryRepository incomeCategoryRepository;
     @Autowired
-    private YearlyExpenseRepository yearlyExpenseRepository;
+    private ExpenseRepository expenseRepository;
     @Autowired
-    private YearlyIncomeRepository yearlyIncomeRepository;
+    private IncomeRepository incomeRepository;
 
     // Expense
     @Override
@@ -32,16 +32,16 @@ public class ExpenseIncomeServiceImpl implements ExpenseIncomeService {
         expenseCategoryRepository.deleteById(categoryId);
     }
     @Override
-    public List<YearlyExpense> getYearlyExpenses(int userId, int year) {
-        return yearlyExpenseRepository.findByUserIdAndYear(userId, year);
+    public List<Expense> getExpenses(int userId, int year) {
+        return expenseRepository.findByUserIdAndYear(userId, year);
     }
     @Override
-    public YearlyExpense saveYearlyExpense(YearlyExpense expense) {
-        return yearlyExpenseRepository.save(expense);
+    public Expense saveExpense(Expense expense) {
+        return expenseRepository.save(expense);
     }
     @Override
-    public void deleteYearlyExpense(int expenseId) {
-        yearlyExpenseRepository.deleteById(expenseId);
+    public void deleteExpense(int expenseId) {
+        expenseRepository.deleteById(expenseId);
     }
 
     // Income
@@ -58,15 +58,15 @@ public class ExpenseIncomeServiceImpl implements ExpenseIncomeService {
         incomeCategoryRepository.deleteById(categoryId);
     }
     @Override
-    public List<YearlyIncome> getYearlyIncomes(int userId, int year) {
-        return yearlyIncomeRepository.findByUserIdAndYear(userId, year);
+    public List<Income> getIncomes(int userId, int year) {
+        return incomeRepository.findByUserIdAndYear(userId, year);
     }
     @Override
-    public YearlyIncome saveYearlyIncome(YearlyIncome income) {
-        return yearlyIncomeRepository.save(income);
+    public Income saveIncome(Income income) {
+        return incomeRepository.save(income);
     }
     @Override
-    public void deleteYearlyIncome(int incomeId) {
-        yearlyIncomeRepository.deleteById(incomeId);
+    public void deleteIncome(int incomeId) {
+        incomeRepository.deleteById(incomeId);
     }
 } 

@@ -3,8 +3,8 @@ package com.alper.finance.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "yearly_expense")
-public class YearlyExpense {
+@Table(name = "expense")
+public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -21,9 +21,9 @@ public class YearlyExpense {
     @Column(name = "amount")
     private double amount;
 
-    public YearlyExpense() {}
+    public Expense() {}
 
-    public YearlyExpense(int userId, int year, int categoryId, double amount) {
+    public Expense(int userId, int year, int categoryId, double amount) {
         this.userId = userId;
         this.year = year;
         this.categoryId = categoryId;
