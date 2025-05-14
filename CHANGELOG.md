@@ -1,6 +1,9 @@
 ## 📦 Releases / Changelog
 
-### v2.0.1 - Displaying the running version in the footer (Current)
+### v2.0.2 - Paging Feature in asset list and Cosmetic Changes (Current)
+- **[MFW-11](https://github.com/alperozdamar/my-finance-watcher/pull/24)** - Showing dollar/TL Exchance Rate (Online)
+
+### v2.0.1 - Displaying the running version in the footer 
 - **[MFW-10](https://github.com/alperozdamar/my-finance-watcher/pull/22)** - Showing dollar/TL Exchance Rate (Online)
 - **[MFW-9](https://github.com/alperozdamar/my-finance-watcher/pull/20)** - Fix the Date Picker Bug in updates
 - **[MFW-8](https://github.com/alperozdamar/my-finance-watcher/pull/18)** - Displaying the running version in the footer
