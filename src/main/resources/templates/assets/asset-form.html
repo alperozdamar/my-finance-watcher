@@ -2,21 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <!-- Required meta tags -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-yada..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Save Asset</title>
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
         integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
         crossorigin="anonymous">
-
-  <!-- add styles -->
   <link rel="stylesheet" th:href="@{/css/jquery-ui-1.9.2.custom.css}" type="text/css"/>
-  <!-- add scripts -->
-
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <!-- jQuery & jQuery UI for Datepicker -->
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
@@ -24,78 +24,125 @@
       $("#datepicker").datepicker();
     });
   </script>
-
-  <title>Save Asset</title>
 </head>
 
 <body>
+<div class="container mt-4">
 
-<div class="container">
-
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>Asset Directory</h3>
-    <h6 class="text-muted mb-0">1 USD = <span th:text="${usdToTryRate}">...</span> TRY</h6>
+  <!-- Page Title & USD/TRY Rate -->
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <h3 class="mt-1">Asset Directory</h3>
+    <h6 class="text-muted">1 USD = <span th:text="${usdToTryRate}">...</span> TRY</h6>
   </div>
   <hr>
 
-  <p class="h4 mb-4">Save Asset</p>
+  <!-- Form Card -->
+  <div class="card shadow-sm">
+    <div class="card-body">
 
-  <form th:action="@{/assets/save}"
-        th:object="${asset}" method="POST">
+      <h5 class="mb-4">Save Asset</h5>
 
+      <form th:action="@{/assets/save}" th:object="${asset}" method="POST">
+        <input type="hidden" th:field="*{id}"/>
 
-    <!-- Add hidden form field to handle update -->
-    <input type="hidden" th:field="*{id}"/>
+        <!-- Date -->
+        <div class="form-group col-md-4 px-0">
+          <label>Date</label>
+          <input type="date" th:field="*{date}" class="form-control" />
+        </div>
 
-    <th>Date</th>
-    <input type="date" th:field="*{date}" th:value="${#dates.format(asset.date, 'yyyy-MM-dd')}"
-           class="form-control mb-4 col-4" placeholder="Date"/>
+        <!-- Bank Accounts -->
+        <h5 class="mt-4">Bank Accounts</h5>
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <label>
+              <a href="https://www.bankofamerica.com" target="_blank" rel="noopener"
+                 class="text-dark text-decoration-none">
+                🔗 Bank of America
+              </a>
+            </label>          
+            <input type="text" th:field="*{boa}" class="form-control mb-3" />
+          </div>
+          <div class="col-md-6">
+            <label>
+              <a href="https://www.chase.com" target="_blank" rel="noopener"
+                 class="text-dark text-decoration-none">
+                🔗 Chase
+              </a>
+            </label>
+            <input type="text" th:field="*{chase}" class="form-control mb-3" />
+          </div>
+          <div class="col-md-6">
+            <label>
+              <a href="https://www.isbank.com.tr/" target="_blank" rel="noopener"
+                 class="text-dark text-decoration-none">
+                🔗 Turkish Banks
+              </a>
+            </label>
+            <input type="text" th:field="*{hsbcTr}" class="form-control mb-3" />
+          </div>
+          <div class="col-md-6">
+            <label>
+              <a href="https://robinhood.com/" target="_blank" rel="noopener"
+                 class="text-dark text-decoration-none">
+                🔗 Stock Market
+              </a>
+            </label>
+            <input type="text" th:field="*{stock}" class="form-control mb-3" />
+          </div>
+        </div>
 
+        <!-- Retirement -->
+        <h5 class="mt-4">Retirement</h5>
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <label>
+              <a href="https://digital.fidelity.com/prgw/digital/login/full-page" target="_blank" rel="noopener"
+                 class="text-dark text-decoration-none">
+                🔗 Retirement-401K
+              </a>
+            </label>
+            <input type="text" th:field="*{ret401k}" class="form-control mb-3" />
+          </div>
+          <div class="col-md-6">
+            <label>Retirement-Turkey</label>
+            <input type="text" th:field="*{retTur}" class="form-control mb-3" />
+          </div>
+        </div>
 
-    <th>Bank of America</th>
-    <input type="text" th:field="*{boa}"
-           class="form-control mb-4 col-4" placeholder="Bank of America">
+        <!-- Other Accounts -->
+        <h5 class="mt-4">Other</h5>
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <label>Serda-Account</label>
+            <input type="text" th:field="*{serda}" class="form-control mb-3" />
+          </div>
+          <div class="col-md-6">
+            <label>Total Credit Card Debt</label>
+            <input type="text" th:field="*{debt}" class="form-control mb-3" />
+          </div>
+        </div>
 
-    <th>Chase</th>
-    <input type="text" th:field="*{chase}"
-           class="form-control mb-4 col-4" placeholder="Chase">
+        <!-- Description -->
+        <label>Description</label>
+        <input type="text" th:field="*{description}" class="form-control mb-3" placeholder="Optional notes" />
 
-    <th>Turkish Banks</th>
-    <input type="text" th:field="*{hsbcTr}"
-           class="form-control mb-4 col-4" placeholder="Turkish Banks">
+        <!-- Save Button -->
+        <div class="text-right">
+          <button type="submit" class="btn btn-primary px-4">💾 Save</button>
+        </div>
 
-    <th>Stock Market</th>
-    <input type="text" th:field="*{stock}"
-           class="form-control mb-4 col-4" placeholder="Stock Market">
+      </form>
+    </div>
+  </div>
 
-    <th>Retirement-401K</th>
-    <input type="text" th:field="*{ret401k}"
-           class="form-control mb-4 col-4" placeholder="Retirement-401K">
-
-    <th>Retirement-Turkey</th>
-    <input type="text" th:field="*{retTur}"
-           class="form-control mb-4 col-4" placeholder="Retirement-Turkey">
-
-    <th>Serda-Account</th>
-    <input type="text" th:field="*{serda}"
-           class="form-control mb-4 col-4" placeholder="Serda-Account">
-
-
-    <th> Total Credit Card Debt </th>
-    <input type="text" th:field="*{debt}"
-           class="form-control mb-4 col-4" placeholder="Total Credit Card Debt">
-    
-    <th>Description</th>
-    <input type="text" th:field="*{description}"
-           class="form-control mb-4 col-4" placeholder="Description">
-
-    <button type="submit" class="btn btn-info col-2">Save</button>
-
-  </form>
-
-  <hr>
-  <a th:href="@{/assets/list}">Back to Assets List</a>
-
+  <!-- Back Link -->
+  <div class="mt-4">
+    <a th:href="@{/assets/list}" class="btn btn-link">← Back to Assets List</a>
+  </div>
 </div>
 
 <footer class="text-center mt-5 mb-2 text-muted">
@@ -103,15 +150,4 @@
 </footer>
 
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-

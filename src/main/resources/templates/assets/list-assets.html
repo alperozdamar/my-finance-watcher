@@ -41,7 +41,7 @@
             Add asset
         </a>
     </form>
-
+    
     <table class="table table-bordered table-striped">
         <thead class="thead-Success">
         <tr>
@@ -91,15 +91,51 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script th:src="@{/js/trend-chart.js}"></script>
 
+    <form class="form-inline mb-3" method="get" th:action="@{/assets/list}">
+        <label for="limit" class="mr-2">Show:</label>
+        <select id="limit" name="limit" class="form-control form-control-sm mr-2" onchange="this.form.submit()">
+            <option th:value="12" th:selected="${selectedLimit} == 12">Last Year</option>
+            <option th:value="24" th:selected="${selectedLimit} == 24">Last 2 Years</option>
+            <option th:value="48" th:selected="${selectedLimit} == 48">Last 4 Years</option>
+            <option th:value="99999" th:selected="${selectedLimit} == 99999">All</option>
+        </select>
+        <span class="text-muted small">rows</span>
+    </form>
+    
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
         <tr>
             <th>Date</th>
-            <th>Bank of America</th>
-            <th>Chase</th>
-            <th>Turkish Banks</th>
-            <th>Stock Market</th>
-            <th>Retirement-401K</th>
+            <th>
+                <a href="https://www.bankofamerica.com/?page_msg=signoff&request_locale=en_US"
+                   target="_blank" rel="noopener" class="text-white text-decoration-none">
+                    Bank of America
+                </a>
+            </th>
+            <th>
+                <a href="https://www.chase.com/"
+                   target="_blank" rel="noopener" class="text-white text-decoration-none">
+                    Chase
+                </a>
+            </th>
+            <th>
+                <a href="https://www.isbank.com.tr/"
+                   target="_blank" rel="noopener" class="text-white text-decoration-none">
+                    Turkish Banks
+                </a>
+            </th>
+            <th>
+                <a href="https://robinhood.com/"
+                   target="_blank" rel="noopener" class="text-white text-decoration-none">
+                    Stock Market
+                </a>
+            </th>
+            <th>
+                <a href="https://digital.fidelity.com/prgw/digital/login/full-page"
+                   target="_blank" rel="noopener" class="text-white text-decoration-none">
+                    Retirement-401K
+                </a>
+            </th>
             <th>Retirement-Turkey</th>
             <th>Serda Account</th>
             <th>Credit Card Debt</th>
@@ -111,7 +147,7 @@
             <th>Action</th>
         </tr>
         </thead>
-
+        
         <tbody>
         <tr th:each="tempAsset, iterStat : ${assets}">
             <td th:text="${#dates.format(tempAsset.date, 'MM-dd-yyyy')}"></td>
@@ -125,7 +161,9 @@
             <td th:text="'$'+${tempAsset.debt}"/>
             <td th:text="${tempAsset.difference}"/>
             <td th:text="'$'+${tempAsset.total}"/>
-            <td th:text="${tempAsset.description}"/>
+            <td th:title="${tempAsset.description}">
+                <span th:text="${tempAsset.description != null and tempAsset.description.length() > 50} ? ${tempAsset.description.substring(0, 50)} + '…' : ${tempAsset.description}"></span>
+            </td>
             <td th:text="'$'+${tempAsset.moneyReady}">
             </td>
             <td>
