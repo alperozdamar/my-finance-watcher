@@ -3,16 +3,16 @@ package com.alper.finance.controller;
 import com.alper.finance.entity.Asset;
 import com.alper.finance.entity.Statistic;
 import com.alper.finance.service.AssetService;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import java.util.Date;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -28,44 +28,45 @@ public class AssetController {
     }
 
     // add mapping for "/list"
-
     @GetMapping("/list")
-    public String listAssets(Model theModel) {
+    public String listAssets(@RequestParam(value = "limit", required = false) Integer limit,
+                             Model theModel) {
 
-        // get assets from db
+        // Full list of assets for chart and statistics
         List<Asset> theAssets = assetService.findAll();
 
         for (Asset asset : theAssets) {
             asset.setDifference(assetService.calculateDifference(asset));
         }
 
-        Statistic statistic = new Statistic();
-        if (theAssets.size() > 0) {
-            Asset latestAsset = theAssets.get(0);
-            Asset threeMonthsAgoAsset = theAssets.get(6);
+        // Slice for table display
+        int effectiveLimit = (limit == null) ? 12 : limit;
+        List<Asset> visibleAssets = (effectiveLimit > 0 && effectiveLimit < theAssets.size())
+                ? theAssets.subList(0, effectiveLimit)
+                : theAssets;
 
+        theModel.addAttribute("selectedLimit", effectiveLimit);
+
+        // Statistics calculation
+        Statistic statistic = new Statistic();
+        if (!theAssets.isEmpty()) {
+            Asset latestAsset = theAssets.get(0);
+            Asset threeMonthsAgoAsset = theAssets.size() > 6 ? theAssets.get(6) : theAssets.get(theAssets.size() - 1);
+            Asset firstAsset = theAssets.get(theAssets.size() - 1);
 
             statistic.setTotalAsset(latestAsset.getTotal());
             statistic.setReadyMoney(latestAsset.getTotal() - latestAsset.getRet401k() - latestAsset.getRetTur());
 
-            Asset firstAsset = theAssets.get(theAssets.size() - 1);
-
-            latestAsset.getDate();
             long diffInMillies = Math.abs(latestAsset.getDate().getTime() - firstAsset.getDate().getTime());
             long days = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-
             long diff = days / 30;
             if (diff > 0) {
                 statistic.setMonthlySavingAverage((latestAsset.getTotal() - firstAsset.getTotal()) / diff);
             }
             statistic.setThreeMonthsSavingAverage((latestAsset.getTotal() - threeMonthsAgoAsset.getTotal()) / 3);
         }
-        // add to the spring model
-        theModel.addAttribute("statistic", statistic);
-        theModel.addAttribute("assets", theAssets);
 
-
-        // Prepare assetDates, totalAssets, and moneyReady as JSON-friendly lists
+        // Chart data (full list)
         SimpleDateFormat formatter = new SimpleDateFormat("MM-yyyy");
         LocalDate oneYearAgoDate = LocalDate.now().minusYears(1);
 
@@ -97,6 +98,11 @@ public class AssetController {
                 .map(Asset::getMoneyReady)
                 .collect(Collectors.toList());
 
+        // Add to model
+        theModel.addAttribute("assets", visibleAssets); // only limited rows in table
+        theModel.addAttribute("statistic", statistic);
+        theModel.addAttribute("selectedLimit", limit);  // to preserve dropdown state
+
         theModel.addAttribute("assetDates", assetDates);
         theModel.addAttribute("totalAssets", totalAssets);
         theModel.addAttribute("moneyReady", moneyReady);
@@ -105,11 +111,6 @@ public class AssetController {
         theModel.addAttribute("ytdTotalAssets", ytdTotalAssets);
         theModel.addAttribute("ytdMoneyReady", ytdMoneyReady);
 
-
-        theModel.addAttribute("assetDates", assetDates);
-        theModel.addAttribute("totalAssets", totalAssets);
-        theModel.addAttribute("moneyReady", moneyReady);
-        
         return "assets/list-assets";
     }
 
@@ -179,23 +180,4 @@ public class AssetController {
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
