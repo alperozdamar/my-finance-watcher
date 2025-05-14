@@ -1,9 +1,9 @@
 package com.alper.finance.controller;
 
-import com.alper.finance.entity.ExpenseCategory;
-import com.alper.finance.entity.IncomeCategory;
 import com.alper.finance.entity.Expense;
+import com.alper.finance.entity.ExpenseCategory;
 import com.alper.finance.entity.Income;
+import com.alper.finance.entity.IncomeCategory;
 import com.alper.finance.service.ExpenseIncomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
