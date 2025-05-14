@@ -106,11 +106,36 @@
         <thead class="thead-dark">
         <tr>
             <th>Date</th>
-            <th>Bank of America</th>
-            <th>Chase</th>
-            <th>Turkish Banks</th>
-            <th>Stock Market</th>
-            <th>Retirement-401K</th>
+            <th>
+                <a href="https://www.bankofamerica.com/?page_msg=signoff&request_locale=en_US"
+                   target="_blank" rel="noopener" class="text-white text-decoration-none">
+                    Bank of America
+                </a>
+            </th>
+            <th>
+                <a href="https://www.chase.com/"
+                   target="_blank" rel="noopener" class="text-white text-decoration-none">
+                    Chase
+                </a>
+            </th>
+            <th>
+                <a href="https://www.isbank.com.tr/"
+                   target="_blank" rel="noopener" class="text-white text-decoration-none">
+                    Turkish Banks
+                </a>
+            </th>
+            <th>
+                <a href="https://robinhood.com/"
+                   target="_blank" rel="noopener" class="text-white text-decoration-none">
+                    Stock Market
+                </a>
+            </th>
+            <th>
+                <a href="https://digital.fidelity.com/prgw/digital/login/full-page"
+                   target="_blank" rel="noopener" class="text-white text-decoration-none">
+                    Retirement-401K
+                </a>
+            </th>
             <th>Retirement-Turkey</th>
             <th>Serda Account</th>
             <th>Credit Card Debt</th>
@@ -122,7 +147,7 @@
             <th>Action</th>
         </tr>
         </thead>
-
+        
         <tbody>
         <tr th:each="tempAsset, iterStat : ${assets}">
             <td th:text="${#dates.format(tempAsset.date, 'MM-dd-yyyy')}"></td>
