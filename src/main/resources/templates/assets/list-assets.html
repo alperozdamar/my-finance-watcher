@@ -125,7 +125,9 @@
             <td th:text="'$'+${tempAsset.debt}"/>
             <td th:text="${tempAsset.difference}"/>
             <td th:text="'$'+${tempAsset.total}"/>
-            <td th:text="${tempAsset.description}"/>
+            <td th:title="${tempAsset.description}">
+                <span th:text="${#strings.length(tempAsset.description) > 50} ? ${tempAsset.description.substring(0, 50)} + '…' : ${tempAsset.description}"></span>
+            </td>
             <td th:text="'$'+${tempAsset.moneyReady}">
             </td>
             <td>
