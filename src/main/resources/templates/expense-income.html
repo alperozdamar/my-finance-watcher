@@ -14,19 +14,27 @@
     </style>
 </head>
 <body>
-    <div class="full-width-container mt-4 px-4">
-        <a th:href="@{/assets/list}" class="btn btn-secondary mb-3">Back to Assets</a>
-        <h1>Monthly Expense & Income Tracker</h1>
-        <form th:action="@{/tracker}" method="get" id="yearForm">
-            <div class="form-group">
-                <label for="year">Select Year:</label>
-                <select id="year" name="year" class="form-control" onchange="document.getElementById('yearForm').submit()">
-                    <option th:each="y : ${#numbers.sequence(2020, T(java.time.Year).now().value)}"
-                            th:value="${y}" th:text="${y}" th:selected="${y} == ${year}"></option>
-                </select>
-            </div>
-        </form>
+<div class="full-width-container mt-4 px-4">
+    <!-- Top Row: Back Button and USD/TRY Info -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a th:href="@{/assets/list}" class="btn btn-secondary">Back to Assets</a>
+        <h5 class="text-muted mb-0">1 USD = <span th:text="${usdToTryRate}">...</span> TRY</h5>
+    </div>
 
+    <!-- Title -->
+    <h1>Monthly Expense & Income Tracker</h1>
+
+    <!-- Year Dropdown -->
+    <form th:action="@{/tracker}" method="get" id="yearForm">
+        <div class="form-group">
+            <label for="year">Select Year:</label>
+            <select id="year" name="year" class="form-control" style="width: 120px;"
+                    onchange="document.getElementById('yearForm').submit()">
+                <option th:each="y : ${#numbers.sequence(2020, T(java.time.Year).now().value)}"
+                        th:value="${y}" th:text="${y}" th:selected="${y} == ${year}"></option>
+            </select>
+        </div>
+    </form>
         <!-- Summary Table at the Top -->
         <table class="table table-bordered mb-4 mt-4">
             <thead class="thead-light">
