@@ -32,8 +32,8 @@ public class Asset {
     @Column(name = "ret_401k")
     private int ret401k;
 
-    @Column(name = "ret_tur")
-    private int retTur;
+    @Column(name = "ret_serda", columnDefinition = "int(11) default 0")
+    private int retSerda;
 
     @Column(name = "serda", columnDefinition = "int(11) default 0") 
     private int serda;
@@ -56,7 +56,7 @@ public class Asset {
     public Asset() {
     }
 
-    public Asset(int id, Date date, int boa, int chase, int hsbcTr, int stock, int ret401k, int retTur, int total) {
+    public Asset(int id, Date date, int boa, int chase, int hsbcTr, int stock, int ret401k, int retSerda, int total) {
         this.id = id;
         this.date = date;
         this.boa = boa;
@@ -64,7 +64,7 @@ public class Asset {
         this.hsbcTr = hsbcTr;
         this.stock = stock;
         this.ret401k = ret401k;
-        this.retTur = retTur;
+        this.retSerda = retSerda;
         this.total = total;
     }
 
@@ -124,12 +124,12 @@ public class Asset {
         this.ret401k = ret401k;
     }
 
-    public int getRetTur() {
-        return retTur;
+    public int getRetSerda() {
+        return retSerda;
     }
 
-    public void setRetTur(int retTur) {
-        this.retTur = retTur;
+    public void setRetSerda(int retSerda) {
+        this.retSerda = retSerda;
     }
 
     public int getDifference() {
@@ -188,7 +188,7 @@ public class Asset {
                 ", hsbcTr=" + hsbcTr +
                 ", stock=" + stock +
                 ", ret401k=" + ret401k +
-                ", retTur=" + retTur +
+                ", retSerda=" + retSerda +
                 ", serda=" + serda +
                 ", debt=" + debt +
                 ", difference=" + difference +

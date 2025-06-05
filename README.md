@@ -15,7 +15,7 @@ A personal finance tracking web application for managing assets, expenses, and i
 - Thymeleaf (HTML templates)
 - MySQL (database)
 - Docker (containerization)
-- GitHub Actions (CI/CD)
+- GitHub Actions (CI/CD) 
 
 ---
 

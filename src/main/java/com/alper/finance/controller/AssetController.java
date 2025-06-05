@@ -55,7 +55,7 @@ public class AssetController {
             Asset firstAsset = theAssets.get(theAssets.size() - 1);
 
             statistic.setTotalAsset(latestAsset.getTotal());
-            statistic.setReadyMoney(latestAsset.getTotal() - latestAsset.getRet401k() - latestAsset.getRetTur());
+            statistic.setReadyMoney(latestAsset.getTotal() - latestAsset.getRet401k() - latestAsset.getRetSerda());
 
             long diffInMillies = Math.abs(latestAsset.getDate().getTime() - firstAsset.getDate().getTime());
             long days = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);

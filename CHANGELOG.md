@@ -1,6 +1,7 @@
 ## 📦 Releases / Changelog
 
 ### v2.0.2 - Paging Feature in asset list and Cosmetic Changes (Current)
+- **[MFW-12](https://github.com/alperozdamar/my-finance-watcher/pull/25)** - Changing column name to retSerda
 - **[MFW-11](https://github.com/alperozdamar/my-finance-watcher/pull/24)** - Paging Feature in asset list is added
 
 ### v2.0.1 - Displaying the running version in the footer 
