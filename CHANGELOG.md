@@ -1,7 +1,7 @@
 ## 📦 Releases / Changelog
 
 ### v2.0.3 - Available RSU is added (Current)
-- **[MFW-13](https://github.com/alperozdamar/my-finance-watcher/pull/26)** - Adding column name to Available RSU
+- **[MFW-13](https://github.com/alperozdamar/my-finance-watcher/pull/26)** - Adding column name to Available RSU and bug fix in Last 3 Months Avg. Saving Calculation
 
 ### v2.0.2 - Paging Feature in asset list and Cosmetic Changes
 - **[MFW-12](https://github.com/alperozdamar/my-finance-watcher/pull/25)** - Changing column name to retSerda
