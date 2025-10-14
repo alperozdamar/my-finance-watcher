@@ -48,6 +48,10 @@ public class Asset {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "available_rsu", columnDefinition = "int(11) default 0")
+    private int availableRsu;
+    
     
     @Transient
     private int moneyReady;
@@ -178,6 +182,15 @@ public class Asset {
         return boa + chase + hsbcTr + stock + serda - debt;
     }
 
+    // Getter and Setter
+    public int getAvailableRsu() {
+        return availableRsu;
+    }
+
+    public void setAvailableRsu(int availableRsu) {
+        this.availableRsu = availableRsu;
+    }
+
     @Override
     public String toString() {
         return "Asset{" +
@@ -191,6 +204,7 @@ public class Asset {
                 ", retSerda=" + retSerda +
                 ", serda=" + serda +
                 ", debt=" + debt +
+                ", availableRsu=" + availableRsu +
                 ", difference=" + difference +
                 ", total=" + total +
                 ", description='" + description + '\'' +
