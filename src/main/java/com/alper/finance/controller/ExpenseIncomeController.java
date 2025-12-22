@@ -4,15 +4,20 @@ import com.alper.finance.entity.Expense;
 import com.alper.finance.entity.ExpenseCategory;
 import com.alper.finance.entity.Income;
 import com.alper.finance.entity.IncomeCategory;
+import com.alper.finance.entity.ExpenseIncomeSnapshot;
 import com.alper.finance.service.ExpenseIncomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/tracker")
@@ -44,6 +49,22 @@ public class ExpenseIncomeController {
         double totalExpense = expenses.stream().mapToDouble(Expense::getAmount).sum();
         double netDiff = totalIncome - totalExpense;
 
+        List<ExpenseIncomeSnapshot> snapshots = expenseIncomeService.getSnapshots(1);
+        List<ExpenseIncomeSnapshot> snapshotAsc = new ArrayList<>(snapshots);
+        java.util.Collections.reverse(snapshotAsc); // oldest -> newest for chart
+
+        List<String> snapLabels = new ArrayList<>();
+        List<Double> snapIncome = new ArrayList<>();
+        List<Double> snapExpense = new ArrayList<>();
+        List<Double> snapNet = new ArrayList<>();
+        for (ExpenseIncomeSnapshot s : snapshotAsc) {
+            LocalDate d = toLocalDate(s.getSnapshotDate());
+            snapLabels.add(d.toString());
+            snapIncome.add(s.getTotalIncome());
+            snapExpense.add(s.getTotalExpense());
+            snapNet.add(s.getNetAmount());
+        }
+
         model.addAttribute("year", year);
         model.addAttribute("expenseCategories", expenseCategories);
         model.addAttribute("incomeCategories", incomeCategories);
@@ -54,6 +75,11 @@ public class ExpenseIncomeController {
         model.addAttribute("totalIncome", totalIncome);
         model.addAttribute("totalExpense", totalExpense);
         model.addAttribute("netDiff", netDiff);
+        model.addAttribute("snapshots", snapshots);
+        model.addAttribute("snapLabels", snapLabels);
+        model.addAttribute("snapIncome", snapIncome);
+        model.addAttribute("snapExpense", snapExpense);
+        model.addAttribute("snapNet", snapNet);
 
         return "expense-income";
     }
@@ -136,5 +162,37 @@ public class ExpenseIncomeController {
     public String deleteIncome(@PathVariable int id, @RequestParam int year) {
         expenseIncomeService.deleteIncome(id);
         return "redirect:/tracker?year=" + year;
+    }
+
+    @PostMapping("/snapshot")
+    public String addSnapshot(@RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) LocalDate date,
+                              @RequestParam int year,
+                              @RequestParam(required = false) String note) {
+        double totalIncome = expenseIncomeService.getIncomes(1, year).stream().mapToDouble(Income::getAmount).sum();
+        double totalExpense = expenseIncomeService.getExpenses(1, year).stream().mapToDouble(Expense::getAmount).sum();
+        double net = totalIncome - totalExpense;
+
+        ExpenseIncomeSnapshot snap = new ExpenseIncomeSnapshot();
+        snap.setUserId(1);
+        snap.setSnapshotDate(java.sql.Date.valueOf(date));
+        snap.setTotalIncome(totalIncome);
+        snap.setTotalExpense(totalExpense);
+        snap.setNetAmount(net);
+        snap.setNote(note);
+        expenseIncomeService.saveSnapshot(snap);
+        return "redirect:/tracker?year=" + year;
+    }
+
+    @PostMapping("/snapshot/{id}/delete")
+    public String deleteSnapshot(@PathVariable int id, @RequestParam int year) {
+        expenseIncomeService.deleteSnapshot(id);
+        return "redirect:/tracker?year=" + year;
+    }
+
+    private LocalDate toLocalDate(java.util.Date date) {
+        if (date == null) {
+            return LocalDate.now();
+        }
+        return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
     }
 } 

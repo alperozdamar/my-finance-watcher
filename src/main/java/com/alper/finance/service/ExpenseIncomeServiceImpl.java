@@ -17,6 +17,8 @@ public class ExpenseIncomeServiceImpl implements ExpenseIncomeService {
     private ExpenseRepository expenseRepository;
     @Autowired
     private IncomeRepository incomeRepository;
+    @Autowired
+    private ExpenseIncomeSnapshotRepository snapshotRepository;
 
     // Expense
     @Override
@@ -68,5 +70,21 @@ public class ExpenseIncomeServiceImpl implements ExpenseIncomeService {
     @Override
     public void deleteIncome(int incomeId) {
         incomeRepository.deleteById(incomeId);
+    }
+
+    // Snapshots
+    @Override
+    public List<ExpenseIncomeSnapshot> getSnapshots(int userId) {
+        return snapshotRepository.findByUserIdOrderBySnapshotDateDesc(userId);
+    }
+
+    @Override
+    public ExpenseIncomeSnapshot saveSnapshot(ExpenseIncomeSnapshot snapshot) {
+        return snapshotRepository.save(snapshot);
+    }
+
+    @Override
+    public void deleteSnapshot(int snapshotId) {
+        snapshotRepository.deleteById(snapshotId);
     }
 } 

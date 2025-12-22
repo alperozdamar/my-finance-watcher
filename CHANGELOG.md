@@ -1,10 +1,16 @@
 ## 📦 Releases / Changelog
 
-### v2.0.3 - Available RSU is added (Current)
-- **[MFW-13](https://github.com/alperozdamar/my-finance-watcher/pull/26)** - Adding column name to Available RSU and bug fix in Last 3 Months Avg. Saving Calculation
+### v2.0.4 - Net worth + tracker snapshots and UI improvements (Current)
+**[MFW-13](https://github.com/alperozdamar/my-finance-watcher/pull/27)**
+- Net Worth: Added quick snapshots (assets/liabilities/net), chart at top, snapshot table with delete, Y-axis readability tweaks, newest-on-right ordering, and nav buttons across pages.
+- Assets: Chart ordering fixed (newest on the right).
+- Expense & Income Tracker: Added snapshot save/delete, chart at top, snapshot history table, unified nav buttons, removed year selector for a simpler default view.
+
+### v2.0.3 - Available RSU is added 
+- **[MFW-13](https://github.com/alperozdamar/my-finance-watcher/pull/27)** - Adding column name to Available RSU and bug fix in Last 3 Months Avg. Saving Calculation
 
 ### v2.0.2 - Paging Feature in asset list and Cosmetic Changes
-- **[MFW-12](https://github.com/alperozdamar/my-finance-watcher/pull/25)** - Changing column name to retSerda
+- **[MFW-12](https://github.com/alperozdamar/my-finance-watcher/pull/26)** - Changing column name to retSerda
 - **[MFW-11](https://github.com/alperozdamar/my-finance-watcher/pull/24)** - Paging Feature in asset list is added
 
 ### v2.0.1 - Displaying the running version in the footer 
