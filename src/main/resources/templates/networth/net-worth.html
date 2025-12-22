@@ -236,6 +236,38 @@
             </div>
         </div>
     </div>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Valuation Search Helper</span>
+            <span class="text-muted small">Opens suggested sites in a new tab</span>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <input class="form-control" id="searchQuery" placeholder="e.g. Example Home Address or Mercedes C180 2013">
+                </div>
+                <div class="form-group col-md-2">
+                    <select class="form-control" id="searchItem">
+                        <option value="HOME">Home</option>
+                        <option value="CAR">Car</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <select class="form-control" id="searchCountry">
+                        <option value="US">US</option>
+                        <option value="TR">Turkey</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <button class="btn btn-outline-info btn-block" type="button" onclick="openValuationSearch()">Open suggested</button>
+                </div>
+            </div>
+            <div class="text-muted small">US homes: Zillow. TR homes: hepsiemlak. TR cars: arabam.com. US cars: cars.com. Otherwise Google search.</div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
@@ -313,6 +345,31 @@
         }
     });
     /*]]>*/
+</script>
+<script>
+    function openValuationSearch() {
+        var q = document.getElementById('searchQuery').value || '';
+        var item = document.getElementById('searchItem').value;
+        var country = document.getElementById('searchCountry').value;
+        if (!q.trim()) {
+            alert('Enter a search query.');
+            return;
+        }
+        var encoded = encodeURIComponent(q.trim());
+        var url;
+        if (item === 'HOME' && country === 'US') {
+            url = 'https://www.zillow.com/homes/' + encoded + '_rb/';
+        } else if (item === 'HOME' && country === 'TR') {
+            url = 'https://www.hepsiemlak.com/arama?kategori=konut&search-text=' + encoded;
+        } else if (item === 'CAR' && country === 'TR') {
+            url = 'https://www.arabam.com/arama?searchText=' + encoded;
+        } else if (item === 'CAR' && country === 'US') {
+            url = 'https://www.cars.com/shopping/results/?q=' + encoded;
+        } else {
+            url = 'https://www.google.com/search?q=' + encoded;
+        }
+        window.open(url, '_blank');
+    }
 </script>
 </body>
 </html>
