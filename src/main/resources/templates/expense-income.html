@@ -15,26 +15,19 @@
 </head>
 <body>
 <div class="full-width-container mt-4 px-4">
-    <!-- Top Row: Back Button and USD/TRY Info -->
+    <!-- Top Row: Nav Buttons and USD/TRY Info -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <a th:href="@{/assets/list}" class="btn btn-secondary">Back to Assets</a>
+        <div>
+            <a th:href="@{/assets/list}" class="btn btn-outline-secondary btn-sm mr-1">Assets</a>
+            <a th:href="@{/tracker}" class="btn btn-info btn-sm mr-1">Expense & Income Tracker</a>
+            <a th:href="@{/networth}" class="btn btn-outline-secondary btn-sm">Net Worth</a>
+        </div>
         <h5 class="text-muted mb-0">1 USD = <span th:text="${usdToTryRate}">...</span> TRY</h5>
     </div>
 
     <!-- Title -->
     <h1>Monthly Expense & Income Tracker</h1>
 
-    <!-- Year Dropdown -->
-    <form th:action="@{/tracker}" method="get" id="yearForm">
-        <div class="form-group">
-            <label for="year">Select Year:</label>
-            <select id="year" name="year" class="form-control" style="width: 120px;"
-                    onchange="document.getElementById('yearForm').submit()">
-                <option th:each="y : ${#numbers.sequence(2020, T(java.time.Year).now().value)}"
-                        th:value="${y}" th:text="${y}" th:selected="${y} == ${year}"></option>
-            </select>
-        </div>
-    </form>
         <!-- Summary Table at the Top -->
         <table class="table table-bordered mb-4 mt-4">
             <thead class="thead-light">
@@ -52,6 +45,34 @@
                 </tr>
             </tbody>
         </table>
+
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Expense & Income Over Time</span>
+                <span class="text-muted small">Save snapshot to plot</span>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <form th:action="@{/tracker/snapshot}" method="post" class="form-inline">
+                        <div class="form-group mr-2 mb-2">
+                            <label class="sr-only" for="snapDate">Date</label>
+                            <input type="date" class="form-control" id="snapDate" name="date"
+                                   th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required>
+                        </div>
+                        <div class="form-group mr-2 mb-2">
+                            <label class="sr-only" for="snapNote">Note</label>
+                            <input class="form-control" id="snapNote" name="note" placeholder="e.g. Month end">
+                        </div>
+                        <input type="hidden" name="year" th:value="${year}">
+                        <button class="btn btn-primary mb-2" type="submit">Save snapshot</button>
+                        <div class="text-muted small ml-2">Uses totals shown above for the selected year.</div>
+                    </form>
+                </div>
+                <div>
+                    <canvas id="trackerChart" height="160"></canvas>
+                </div>
+            </div>
+        </div>
 
         <!-- Categories Row -->
         <div class="row">
@@ -184,8 +205,115 @@
     <div class="full-width-container mt-4 px-4 mb-5">
        <br><br>
     </div>
+    <div class="full-width-container mt-4 px-4 mb-5">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Saved Snapshots</span>
+                <span class="text-muted small">Newest first</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive mb-0">
+                    <table class="table table-striped table-bordered mb-0">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Date</th>
+                            <th class="text-right">Income</th>
+                            <th class="text-right">Expense</th>
+                            <th class="text-right">Net</th>
+                            <th>Note</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="snap : ${snapshots}">
+                            <td th:text="${#dates.format(snap.snapshotDate, 'yyyy-MM-dd')}"></td>
+                            <td class="text-right" th:text="${#numbers.formatDecimal(snap.totalIncome, 0, 'COMMA', 2, 'POINT')}"></td>
+                            <td class="text-right" th:text="${#numbers.formatDecimal(snap.totalExpense, 0, 'COMMA', 2, 'POINT')}"></td>
+                            <td class="text-right" th:text="${#numbers.formatDecimal(snap.netAmount, 0, 'COMMA', 2, 'POINT')}"></td>
+                            <td th:text="${snap.note}"></td>
+                            <td class="text-center">
+                                <form th:action="@{|/tracker/snapshot/${snap.id}/delete|}" method="post" style="display:inline;">
+                                    <input type="hidden" name="year" th:value="${year}">
+                                    <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this snapshot?')" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${snapshots.isEmpty()}">
+                            <td colspan="6" class="text-center text-muted">No snapshots yet</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     <footer class="text-center mt-5 mb-2 text-muted">
         Version: <span th:text="${appVersion}">unknown</span>
     </footer>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const snapLabels = /*[[${snapLabels}]]*/ [];
+    const snapIncome = /*[[${snapIncome}]]*/ [];
+    const snapExpense = /*[[${snapExpense}]]*/ [];
+    const snapNet = /*[[${snapNet}]]*/ [];
+    const useSnap = Array.isArray(snapLabels) && snapLabels.length > 0;
+    if (useSnap) {
+        const ctx = document.getElementById('trackerChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: snapLabels,
+                datasets: [
+                    {
+                        label: 'Net',
+                        data: snapNet,
+                        borderColor: '#17a2b8',
+                        backgroundColor: 'rgba(23,162,184,0.1)',
+                        borderWidth: 2,
+                        fill: true
+                    },
+                    {
+                        label: 'Income',
+                        data: snapIncome,
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40,167,69,0.1)',
+                        borderWidth: 2,
+                        fill: false
+                    },
+                    {
+                        label: 'Expense',
+                        data: snapExpense,
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220,53,69,0.1)',
+                        borderWidth: 2,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(value) {
+                                if (Math.abs(value) >= 1000000) {
+                                    return '$' + (value / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+                                }
+                                if (Math.abs(value) >= 1000) {
+                                    return '$' + (value / 1000).toFixed(0) + 'K';
+                                }
+                                return '$' + value;
+                            }
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    /*]]>*/
+</script>
 </body>
 </html> 

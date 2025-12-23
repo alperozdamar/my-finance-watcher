@@ -1,0 +1,377 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
+    <title>Net Worth</title>
+    <link rel="stylesheet" th:href="@{/css/demo.css}" type="text/css"/>
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-start mt-3">
+        <div>
+            <h3>Net Worth</h3>
+            <div class="text-muted small">Track assets vs liabilities over time</div>
+        </div>
+        <div class="text-right">
+            <h6 class="text-muted mb-1">1 USD = <span th:text="${usdToTryRate}">...</span> TRY</h6>
+            <div class="text-muted small">
+                User: <span sec:authentication="name"></span>
+            </div>
+            <div class="text-muted small">
+                Version: <span th:text="${appVersion}">dev</span>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="mb-3">
+        <a th:href="@{/assets/list}" class="btn btn-outline-secondary btn-sm">Assets</a>
+        <a th:href="@{/tracker}" class="btn btn-outline-secondary btn-sm">Expense & Income Tracker</a>
+        <button class="btn btn-info btn-sm" onclick="document.getElementById('chartSection').scrollIntoView({behavior:'smooth'})">
+            View Net Worth Chart
+        </button>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Assets (latest)</div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="'$' + ${#numbers.formatDecimal(latestAssets, 0, 'COMMA', 2, 'POINT')}">0</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">Liabilities (latest)</div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="'$' + ${#numbers.formatDecimal(latestLiabilities, 0, 'COMMA', 2, 'POINT')}">0</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">Net Worth (latest)</div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="'$' + ${#numbers.formatDecimal(latestNetWorth, 0, 'COMMA', 2, 'POINT')}">0</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="chartSection" class="card mb-4">
+        <div class="card-header">Net Worth Over Time</div>
+        <div class="card-body">
+            <canvas id="netWorthChart" height="180"></canvas>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">Add Category</div>
+                <div class="card-body">
+                    <form th:action="@{/networth/category}" method="post" class="form-inline">
+                        <div class="form-group mr-2 mb-2">
+                            <label class="sr-only" for="categoryName">Name</label>
+                            <input class="form-control" id="categoryName" name="name" placeholder="e.g. Primary Home" required>
+                        </div>
+                        <div class="form-group mr-2 mb-2">
+                            <label class="sr-only" for="categoryType">Type</label>
+                            <select class="form-control" id="categoryType" name="type" required>
+                                <option value="ASSET">Asset</option>
+                                <option value="LIABILITY">Liability</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary mb-2" type="submit">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">Add Entry</div>
+                <div class="card-body">
+                    <form th:action="@{/networth/entry}" method="post">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="entryDate">Date</label>
+                                <input type="date" class="form-control" id="entryDate" name="date" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="categoryId">Category</label>
+                                <select class="form-control" id="categoryId" name="categoryId" required>
+                                    <option th:each="cat : ${categories}"
+                                            th:value="${cat.id}"
+                                            th:text="${cat.name + ' (' + cat.type + ')'}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="amount">Amount</label>
+                                <input type="number" step="0.01" class="form-control" id="amount" name="amount" placeholder="0.00" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="note">Note (optional)</label>
+                            <input class="form-control" id="note" name="note" placeholder="e.g. Updated Zillow estimate">
+                        </div>
+                        <button class="btn btn-success" type="submit">Add Entry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Save net worth total</span>
+            <span class="text-muted small">Stores assets/liabilities/net for a chosen date</span>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/networth/quick-snapshot}" method="post" class="form-inline">
+                <div class="form-group mr-2 mb-2">
+                    <label class="sr-only" for="quickDate">Date</label>
+                    <input type="date" class="form-control" id="quickDate" name="date"
+                           th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required>
+                </div>
+                <div class="form-group mr-2 mb-2">
+                    <label class="sr-only" for="quickNote">Note</label>
+                    <input class="form-control" id="quickNote" name="note" placeholder="e.g. Month end close">
+                </div>
+                <button class="btn btn-primary mb-2" type="submit">Save latest totals</button>
+                <div class="text-muted small ml-2">Uses the latest day’s totals shown above.</div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Entries</span>
+            <span class="text-muted small">Most recent first</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered mb-0">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Type</th>
+                        <th class="text-right">Amount</th>
+                        <th class="text-right">Net Effect</th>
+                        <th>Note</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="entry : ${entries}">
+                        <td th:text="${#dates.format(entry.entryDate, 'yyyy-MM-dd')}"></td>
+                        <td th:text="${entry.category.name}"></td>
+                        <td th:text="${entry.category.type}"></td>
+                        <td class="text-right" th:text="'$' + ${#numbers.formatDecimal(entry.amount, 0, 'COMMA', 2, 'POINT')}"></td>
+                        <td class="text-right"
+                            th:classappend="${entry.category.type.name() == 'LIABILITY'} ? 'text-danger' : 'text-success'"
+                            th:text="${entry.category.type.name() == 'LIABILITY'} ? '-$' + ${#numbers.formatDecimal(entry.amount, 0, 'COMMA', 2, 'POINT')} : '$' + ${#numbers.formatDecimal(entry.amount, 0, 'COMMA', 2, 'POINT')}">
+                        </td>
+                        <td th:text="${entry.note}"></td>
+                        <td>
+                            <form th:action="@{|/networth/entry/${entry.id}/delete|}" method="post" style="display:inline;">
+                                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete entry?')" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${entries.isEmpty()}">
+                        <td colspan="7" class="text-center text-muted">No entries yet</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Saved Net Worth Snapshots</span>
+            <span class="text-muted small">Newest first</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive mb-0">
+                <table class="table table-striped table-bordered mb-0">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th class="text-right">Assets</th>
+                        <th class="text-right">Liabilities</th>
+                        <th class="text-right">Net Worth</th>
+                        <th>Note</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="snap : ${snapshots}">
+                        <td th:text="${#dates.format(snap.snapshotDate, 'yyyy-MM-dd')}"></td>
+                        <td class="text-right" th:text="'$' + ${#numbers.formatDecimal(snap.assets, 0, 'COMMA', 2, 'POINT')}"></td>
+                        <td class="text-right" th:text="'$' + ${#numbers.formatDecimal(snap.liabilities, 0, 'COMMA', 2, 'POINT')}"></td>
+                        <td class="text-right" th:text="'$' + ${#numbers.formatDecimal(snap.netWorth, 0, 'COMMA', 2, 'POINT')}"></td>
+                        <td th:text="${snap.note}"></td>
+                        <td class="text-center">
+                            <form th:action="@{|/networth/snapshot/${snap.id}/delete|}" method="post" style="display:inline;">
+                                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this snapshot?')" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${snapshots.isEmpty()}">
+                        <td colspan="6" class="text-center text-muted">No snapshots yet</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Valuation Search Helper</span>
+            <span class="text-muted small">Opens suggested sites in a new tab</span>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <input class="form-control" id="searchQuery" placeholder="e.g. Example Home Address or Mercedes C180 2013">
+                </div>
+                <div class="form-group col-md-2">
+                    <select class="form-control" id="searchItem">
+                        <option value="HOME">Home</option>
+                        <option value="CAR">Car</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <select class="form-control" id="searchCountry">
+                        <option value="US">US</option>
+                        <option value="TR">Turkey</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <button class="btn btn-outline-info btn-block" type="button" onclick="openValuationSearch()">Open suggested</button>
+                </div>
+            </div>
+            <div class="text-muted small">US homes: Zillow. TR homes: hepsiemlak. TR cars: arabam.com. US cars: cars.com. Otherwise Google search.</div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const snapLabels = /*[[${snapLabels}]]*/ [];
+    const snapAssets = /*[[${snapAssets}]]*/ [];
+    const snapLiabilities = /*[[${snapLiabilities}]]*/ [];
+    const snapNet = /*[[${snapNet}]]*/ [];
+    const entryLabels = /*[[${labels}]]*/ [];
+    const entryAssets = /*[[${assets}]]*/ [];
+    const entryLiabilities = /*[[${liabilities}]]*/ [];
+    const entryNet = /*[[${netTotals}]]*/ [];
+
+    const useSnap = Array.isArray(snapLabels) && snapLabels.length > 0;
+    const labels = useSnap ? snapLabels : entryLabels;
+    const assetSeries = useSnap ? snapAssets : entryAssets;
+    const liabilitySeries = useSnap ? snapLiabilities : entryLiabilities;
+    const netSeries = useSnap ? snapNet : entryNet;
+
+    const maxVal = Math.max(...assetSeries.concat(liabilitySeries, netSeries, [1]));
+    const ctx = document.getElementById('netWorthChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Net Worth',
+                    data: netSeries,
+                    borderColor: '#17a2b8',
+                    backgroundColor: 'rgba(23, 162, 184, 0.1)',
+                    borderWidth: 2,
+                    fill: true
+                },
+                {
+                    label: 'Assets',
+                    data: assetSeries,
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    borderWidth: 2,
+                    fill: false
+                },
+                {
+                    label: 'Liabilities',
+                    data: liabilitySeries,
+                    borderColor: '#dc3545',
+                    backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                    borderWidth: 2,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        suggestedMax: maxVal * 1.1,
+                        stepSize: 250000,
+                        callback: function(value) {
+                            if (Math.abs(value) >= 1000000) {
+                                return '$' + (value / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+                            }
+                            if (Math.abs(value) >= 1000) {
+                                return '$' + (value / 1000).toFixed(0) + 'K';
+                            }
+                            return '$' + value;
+                        }
+                    }
+                }]
+            }
+        }
+    });
+    /*]]>*/
+</script>
+<script>
+    function openValuationSearch() {
+        var q = document.getElementById('searchQuery').value || '';
+        var item = document.getElementById('searchItem').value;
+        var country = document.getElementById('searchCountry').value;
+        if (!q.trim()) {
+            alert('Enter a search query.');
+            return;
+        }
+        var encoded = encodeURIComponent(q.trim());
+        var url;
+        if (item === 'HOME' && country === 'US') {
+            url = 'https://www.zillow.com/homes/' + encoded + '_rb/';
+        } else if (item === 'HOME' && country === 'TR') {
+            url = 'https://www.hepsiemlak.com/arama?kategori=konut&search-text=' + encoded;
+        } else if (item === 'CAR' && country === 'TR') {
+            url = 'https://www.arabam.com/arama?searchText=' + encoded;
+        } else if (item === 'CAR' && country === 'US') {
+            url = 'https://www.cars.com/shopping/results/?q=' + encoded;
+        } else {
+            url = 'https://www.google.com/search?q=' + encoded;
+        }
+        window.open(url, '_blank');
+    }
+</script>
+</body>
+</html>
+
+

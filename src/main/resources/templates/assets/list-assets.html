@@ -83,6 +83,7 @@
             Show Year-to-Date Chart
         </button>
         <a th:href="@{/tracker}" class="btn btn-info mb-3">Expense & Income Tracker</a>
+        <a th:href="@{/networth}" class="btn btn-outline-info mb-3 ml-1">Net Worth</a>
     </div>
 
     <div id="trendChartContainer" style="display:none; margin-bottom: 24px;">
@@ -138,6 +139,7 @@
             </th>
             <th>Retirement-Serda</th>
             <th>Serda Account</th>
+            <th>Available RSU</th>
             <th>Credit Card Debt</th>
             <th>Difference</th>
             <th>Total</th>
@@ -158,6 +160,7 @@
             <td th:text="'$'+${tempAsset.ret401k}"/>
             <td th:text="'$'+${tempAsset.retSerda}"/>
             <td th:text="'$'+${tempAsset.serda}"/>
+            <td th:text="'$'+${tempAsset.availableRsu}"/>
             <td th:text="'$'+${tempAsset.debt}"/>
             <td th:text="${tempAsset.difference}"/>
             <td th:text="'$'+${tempAsset.total}"/>

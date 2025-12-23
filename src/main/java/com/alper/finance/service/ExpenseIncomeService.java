@@ -1,9 +1,10 @@
 package com.alper.finance.service;
 
-import com.alper.finance.entity.ExpenseCategory;
-import com.alper.finance.entity.IncomeCategory;
 import com.alper.finance.entity.Expense;
+import com.alper.finance.entity.ExpenseCategory;
+import com.alper.finance.entity.ExpenseIncomeSnapshot;
 import com.alper.finance.entity.Income;
+import com.alper.finance.entity.IncomeCategory;
 
 import java.util.List;
 
@@ -25,4 +26,9 @@ public interface ExpenseIncomeService {
     List<Income> getIncomes(int userId, int year);
     Income saveIncome(Income income);
     void deleteIncome(int incomeId);
-} 
+
+    // Snapshots
+    List<ExpenseIncomeSnapshot> getSnapshots(int userId);
+    ExpenseIncomeSnapshot saveSnapshot(ExpenseIncomeSnapshot snapshot);
+    void deleteSnapshot(int snapshotId);
+}
